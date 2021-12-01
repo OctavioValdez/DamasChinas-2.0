@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+int pendejo = 2;
 struct ficha
 {
     int x;
@@ -737,7 +738,7 @@ int comerf(Ficha* player, Ficha* fichas, int x, int y)
         return 0;
 }
 
-int comerf(Ficha* player, Ficha* fichas, int x, int y)
+int comer(Ficha* player, Ficha* fichas, int x, int y)
 {
     Ficha* ficha = DetectF(x + 100, y + 100, fichas);
     if(ficha != NULL)
