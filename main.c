@@ -58,14 +58,13 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Damas Chinas");
 
     SetTargetFPS(20);
-    int ** Tablero = CrearTablero();
     Ficha * Negras = Crear_fichas(1);
     Ficha * Blancas = Crear_fichas(2);
-    int turno = 1;
-    int* ptrTurno = &turno;
+    int turno = 0;
 
-    int wasMousePressed = 0;
     Ficha *selected = NULL;
+
+
 
 
     while (!WindowShouldClose())    // Detect window close button or ESC key
@@ -75,49 +74,46 @@ int main(void)
         TableroDisplay(screenWidth,screenHeight);
         DibujarFichas(Negras, BLACK);
         DibujarFichas(Blancas, WHITE);
-
-        /*if(turno == 0)
+        if(turno == 0)
         {
             if(selected)
             {
-                // aqui ya tenemos una ficha seleccionada, que queremos hacer con ella
-                CirculosR(selected);
+                CirculosR(selected, Blancas, Negras);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
-                    // aqui posiblemente queremos revisar si el siguiente click del usuario es
-                    // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
-                    PosDiagonalNegras(GetMouseX(), GetMouseY(), selected);
+                    if(PosDiagonalN(GetMouseX(),GetMouseY(),selected, Negras, Blancas) == 1)
+                    {
+                        comerf(selected, Blancas, GetMouseX(),GetMouseY());
+                        printf("%d\n",colision(selected,Blancas));
+                        turno = 1;
+                    }
+
                     selected = NULL;
                 }
-                    //else
-                    //selected = NULL;
-                    //cambioDeTurno(&turno);
             }
-
             if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
             {
                 selected = DetectF(GetMouseX(), GetMouseY(), Negras);
-                if(selected == NULL)
-                    DrawText("eres un burro", 200,400,36,RED);
             }
-        }*/
-
+        }
         if(turno == 1)
         {
             if(selected)
             {
                 // aqui ya tenemos una ficha seleccionada, que queremos hacer con ella
-                CirculosR(selected);
+                CirculosR(selected, Negras, Blancas);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
                     // aqui posiblemente queremos revisar si el siguiente click del usuario es
                     // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
-                    PosDiagonalBlancas(GetMouseX(), GetMouseY(), selected);
-                    selected = NULL;
+                    if(PosDiagonalB(GetMouseX(),GetMouseY(),selected, Blancas, Negras) == 1)
+                    {
+                        comerf(selected, Negras, GetMouseX(),GetMouseY());
+                        printf("%d\n",colision(selected,Negras));
+                        turno = 0;
+                    }
 
-                    //else
-                        //selected = NULL;
-                    //cambioDeTurno(&turno);
+                    selected = NULL;
                 }
 
             }
@@ -125,8 +121,6 @@ int main(void)
             if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
             {
                 selected = DetectF(GetMouseX(), GetMouseY(), Blancas);
-                if(selected == NULL)
-                    DrawText("eres un burro", 200,400,36,RED);
             }
 
         }
