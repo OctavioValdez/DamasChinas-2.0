@@ -1,0 +1,20 @@
+"D:\Clion\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - NMake Makefiles" C:\Users\gerog\Desktop\Damaschinas
+-- Populating raylib
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/gerog/Desktop/Damaschinas/cmake-build-debug/_deps/raylib-subbuild
+[100%] Built target raylib-populate
+-- Testing if -Werror=pointer-arith can be used -- Failed
+-- Testing if -Werror=implicit-function-declaration can be used -- Failed
+-- Testing if -fno-strict-aliasing can be used -- Failed
+-- Using raylib's GLFW
+-- Using Win32 for window creation
+-- Audio Backend: miniaudio
+-- Building raylib static library
+-- Generated build type: Debug
+-- Compiling with the flags:
+--   PLATFORM=PLATFORM_DESKTOP
+--   GRAPHICS=GRAPHICS_API_OPENGL_33
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/gerog/Desktop/Damaschinas/cmake-build-debug
