@@ -13,6 +13,7 @@ int main(void)
     BAGE.r = 207;
     BAGE.g = 185;
     BAGE.b = 151;
+    int x = 2;
 
     InitWindow(screenWidth, screenHeight, "Damas Chinas");
 
