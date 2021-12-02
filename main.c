@@ -81,13 +81,10 @@ int main(void)
                 CirculosR(selected, Blancas, Negras);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
-                    if(PosDiagonalN(GetMouseX(),GetMouseY(),selected, Negras, Blancas) == 1)
+                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, Blancas) == 1)
                     {
-                        comerf(selected, Blancas, GetMouseX(),GetMouseY());
-                        printf("%d\n",colision(selected,Blancas));
                         turno = 1;
                     }
-
                     selected = NULL;
                 }
             }
@@ -106,10 +103,8 @@ int main(void)
                 {
                     // aqui posiblemente queremos revisar si el siguiente click del usuario es
                     // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
-                    if(PosDiagonalB(GetMouseX(),GetMouseY(),selected, Blancas, Negras) == 1)
+                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, Negras) == 1)
                     {
-                        comerf(selected, Negras, GetMouseX(),GetMouseY());
-                        printf("%d\n",colision(selected,Negras));
                         turno = 0;
                     }
 

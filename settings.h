@@ -16,5 +16,5 @@ int PosDiagonalN(int x, int y, Ficha* selected, Ficha* amigas, Ficha* oponentes)
 int comerf(Ficha* player, Ficha* fichas, int x, int y);
 int colision(Ficha* player, Ficha* fichas);
 void add(Ficha* stack, Ficha* fichas);
-void MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Ficha* amigas);
+int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Ficha* amigas);
 #endif //PROYECTOPROGRA_SETTINGS_H
