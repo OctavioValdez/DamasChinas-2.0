@@ -10,14 +10,7 @@ struct ficha
     int id;
     int vida;
     struct ficha* sig;
-};//typedef Ficha;
-
-/*Ficha* stack()
-{
-    Ficha* stack = malloc(sizeof(Ficha));
-    return stack;
-}*/
-
+};
 
 void TableroDisplay(int width,int height)
 {
@@ -316,7 +309,6 @@ int ComidaDisponible(Ficha* player, Ficha* fichas)
         int BanDer = 0;
 
         Ficha* current = fichas;
-        //Ficha* currentp = player;
 
         while(current != NULL)
         {
@@ -325,7 +317,6 @@ int ComidaDisponible(Ficha* player, Ficha* fichas)
             if(current -> x == x_izquierda && current -> y == y_izquierda) //&& (currentp->x != x_izquierda && currentp->y != y_izquierda))
                 BandIzq = 1;
             current = current -> sig;
-            //currentp = currentp->sig;
         }
 
         if(BandIzq == 1 && BanDer == 1)
@@ -347,7 +338,6 @@ int ComidaDisponible(Ficha* player, Ficha* fichas)
         int BanDer = 0;
 
         Ficha* current = fichas;
-        //Ficha* currentp = player;
 
         while(current != NULL)
         {
@@ -657,73 +647,14 @@ void MovNegrasConComida(Ficha *ficha, int dir)
     }
 }
 
-int PosDiagonalB(int x, int y, Ficha* selected, Ficha* amigas)
-{
-    if (selected == NULL)
-        return 0;
-    int izquierda = 0;
-    int derecha = 1;
-
-    if(x < selected -> x + 145 && selected -> x + 55 < x)
-    {
-        if(y > selected -> y - 145 && selected -> y - 55 > y)
-        {
-            MovBlancasSinComida(selected, derecha);
-            return 1;
-        }
-    }
-    if (x > selected->x - 145 && selected->x - 55 > x)
-    {
-        if (y > selected->y - 145 && selected->y - 55 > y)
-        {
-            MovBlancasSinComida(selected, izquierda);
-            return 1;
-        }
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int PosDiagonalN(int x, int y, Ficha* selected, Ficha* amigas)
-{
-    if (selected == NULL)
-        return 0;
-
-    int izquierda = 0;
-    int derecha = 1;
-    if(x < selected -> x + 145 && selected -> x + 55 < x)
-    {
-        if(y < selected -> y + 145 && selected -> y + 55 < y)
-        {
-            MovNegrasSinComida(selected, derecha);
-            return 1;
-        }
-    }
-    if (x > selected->x - 145 && selected->x - 55 > x)
-    {
-        if (y < selected->y + 145 && selected->y + 55 < y)
-        {
-            MovNegrasSinComida(selected, izquierda);
-            return 1;
-        }
-    }
-    else
-    {
-        return 0;
-    }
-
-}
-
 void eliminarf(Ficha* ficha)
 {
     ficha -> vida = 0;
 }
 
-int comerf(Ficha* player, Ficha* fichas, int x, int y)
+int comerFNegraDerecha(Ficha* player, Ficha* oponente)
 {
-    Ficha* ficha = DetectF(x, y, fichas);
+    Ficha* ficha = DetectF(player -> x - 100, player -> y + 100, oponente);
     if(ficha != NULL)
     {
         eliminarf(ficha);
@@ -733,8 +664,405 @@ int comerf(Ficha* player, Ficha* fichas, int x, int y)
         return 0;
 }
 
+int comerFNegraIzquierda(Ficha* player, Ficha* oponente)
+{
+    Ficha* ficha = DetectF(player -> x + 100, player -> y + 100, oponente);
+    if(ficha != NULL)
+    {
+        eliminarf(ficha);
+        return 1;
+    }
+    else
+        return 0;
+}
 
+int comerFBlancaDerecha(Ficha* player, Ficha* oponente)
+{
+    Ficha* ficha = DetectF(player -> x - 100, player -> y - 100, oponente);
+    if(ficha != NULL)
+    {
+        eliminarf(ficha);
+        return 1;
+    }
+    else
+        return 0;
+}
 
+int comerFBlancaIzquierda(Ficha* player, Ficha* oponente)
+{
+    Ficha* ficha = DetectF(player -> x + 100, player-> y - 100, oponente);
+    if(ficha != NULL)
+    {
+        eliminarf(ficha);
+        return 1;
+    }
+    else
+        return 0;
+}
+
+int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponentes)
+{
+    if(selected -> id < 12) //Fichas Negras
+    {
+        if(colision(selected, oponentes) == 3) //Si hay fichas del oponente a la izquierda y derecha
+        {
+            if(ComidaDisponible(selected, oponentes) == 1 && isAmigaLejana(selected, amigas) == 2)
+                return 0;
+            if(ComidaDisponible(selected, oponentes) == 1 && isAmigaLejana(selected, amigas) != 2) //Si la del lado derecho no se puede comer, y no hay una amiga estorbando a la izquierda
+            {
+                if(x > selected->x - 245 && selected->x - 155 > x && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 0);
+                    comerFBlancaIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+
+            if(ComidaDisponible(selected, oponentes) == 2 && isAmigaLejana(selected, amigas) == 1)
+                return 0;
+            if(ComidaDisponible(selected, oponentes) == 2 && isAmigaLejana(selected, amigas) != 1) //Si la del lado izquierdo no se puede comer
+            {
+                if(x < selected->x + 245 && selected->x + 155 < x && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 1);
+                    comerFBlancaDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+            if(ComidaDisponible(selected, oponentes) == 3) //Si ninguna se puede comer
+                return 0; //Salimos de la funciOn
+            if(ComidaDisponible(selected, oponentes) == 0) //Si ambas fichas se pueden comer :)
+            {
+                if(x > selected->x - 245 && selected->x - 155 > x && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 0);
+                    comerFBlancaIzquierda(selected, oponentes);
+                    return 1;
+                }
+                if(x < selected->x + 245 && selected->x + 155 < x && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 1);
+                    comerFBlancaDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+        }
+        if(colision(selected, oponentes) == 0)
+        {
+            if(isAmiga(selected, amigas) == 3)
+                return 0;
+            else if(isAmiga(selected, amigas) == 2)
+            {
+                if(x < selected->x + 145 && selected->x + 55 < x && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 1);
+                    return 1;
+                }
+            }
+
+            else if(isAmiga(selected, amigas) == 1)
+            {
+                if(x > selected->x - 145 && selected->x - 55 > x && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+            else if(isAmiga(selected, amigas) == 0)
+            {
+                if(x < selected->x + 145 && selected->x + 55 < x && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 1);
+                    return 1;
+                }
+                if(x > selected->x - 145 && selected->x - 55 > x && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+        }
+        if(colision(selected, oponentes) == 1) //Si hay una ficha del oponente a la derecha
+        {
+            if(ComidaDisponible(selected, oponentes) == 1 || ComidaDisponible(selected, oponentes) == 3) //Si no se puede comer :(
+            {
+                if(isAmiga(selected, amigas) == 2) //Si tenemos una ficha amiga a la izquierda no hacemos nada
+                    return 0;
+                else // Si no
+                {
+                    if(x > selected -> x - 145 && x < selected -> x - 55 && y < selected->y + 145 && selected->y + 55 < y)
+                    {
+                        MovNegrasSinComida(selected, 0);
+                        return 1;
+                    }
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 1 && isAmiga(selected, amigas) == 2 && isAmigaLejana(selected, amigas) == 1)
+                return 0;
+            else if(ComidaDisponible(selected, oponentes) != 1 && (isAmigaLejana(selected, amigas) == 1 || isAmigaLejana(selected, amigas) == 3))
+            {
+                if(x > selected -> x - 145 && x < selected -> x - 55 && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 1 && isAmiga(selected, amigas) == 2)
+            {
+                if(x < selected -> x + 245 && x > selected -> x + 155 && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 1);
+                    comerFBlancaDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+            else
+            {
+                if(x > selected -> x - 145 && x < selected -> x - 55 && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 0);
+                    return 1;
+                }
+                if(x < selected -> x + 245 && x < selected -> x + 155 && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 1);
+                    comerFBlancaDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+        }
+        if(colision(selected, oponentes) == 2) //Cuando hay una ficha oponente a nuestra izquierda
+        {
+            if(ComidaDisponible(selected, oponentes) == 2 || ComidaDisponible(selected, oponentes) == 3) //Si no se puede comer :(
+            {
+                if(isAmiga(selected, amigas) == 1) //Si la que estA a la derecha es una ficha amiga
+                    return 0;
+                else
+                {
+                    if(x < selected -> x + 145 && x > selected -> x + 55 && y < selected->y + 145 && selected->y + 55 < y)
+                    {
+                        MovNegrasSinComida(selected, 1);
+                        return 1;
+                    }
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 2 && isAmiga(selected, amigas) == 1 && isAmigaLejana(selected, amigas) == 2)
+                return 0;
+            else if(ComidaDisponible(selected, oponentes) != 2 && (isAmigaLejana(selected, amigas) == 2 || isAmigaLejana(selected, amigas) == 3))
+            {
+                if(x < selected -> x + 145 && x > selected -> x + 55 && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 1);
+                    return 1;
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 2 && isAmiga(selected, amigas) == 1) //Si es posible comer esa ficha a la izquierda y tenemos una amiga a la derecha
+            {
+                if(x > selected -> x - 245 && x < selected -> x - 155 && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 0);
+                    comerFBlancaIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+            else
+            {
+                if(x < selected -> x + 145 && x > selected -> x + 55 && y < selected->y + 145 && selected->y + 55 < y)
+                {
+                    MovNegrasSinComida(selected, 1);
+                    return 1;
+                }
+                if(x > selected -> x - 245 && x < selected -> x - 155 && y < selected->y + 245 && selected->y + 155 < y)
+                {
+                    MovNegrasConComida(selected, 0);
+                    comerFBlancaIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+
+        }
+    }
+    else //Fichas blancas
+    {
+        if(colision(selected, oponentes) == 3) //Si hay fichas del oponente a la izquierda y derecha
+        {
+            if(ComidaDisponible(selected, oponentes) == 1 && isAmigaLejana(selected, amigas) == 2)
+                return 0;
+            if(ComidaDisponible(selected, oponentes) == 1 && isAmigaLejana(selected, amigas) != 2) //Si la del lado derecho no se puede comer, y no hay una amiga estorbando a la izquierda
+            {
+                if(x > selected->x - 245 && selected->x - 155 > x && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 0);
+                    comerFNegraIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+
+            if(ComidaDisponible(selected, oponentes) == 2 && isAmigaLejana(selected, amigas) == 1)
+                return 0;
+            if(ComidaDisponible(selected, oponentes) == 2 && isAmigaLejana(selected, amigas) != 1) //Si la del lado izquierdo no se puede comer
+            {
+                if(x < selected->x + 245 && selected->x + 155 < x && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 1);
+                    comerFNegraDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+            if(ComidaDisponible(selected, oponentes) == 3) //Si ninguna se puede comer
+                return 0; //Salimos de la funciOn
+            if(ComidaDisponible(selected, oponentes) == 0) //Si ambas fichas se pueden comer :)
+            {
+                if(x > selected->x - 245 && selected->x - 155 > x && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 0);
+                    comerFNegraIzquierda(selected, oponentes);
+                    return 1;
+                }
+                if(x < selected->x + 245 && selected->x + 155 < x && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 1);
+                    comerFNegraDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+        }
+
+        if(colision(selected, oponentes) == 0)
+        {
+            if(isAmiga(selected, amigas) == 3)
+                return 0;
+            else if(isAmiga(selected, amigas) == 2)
+            {
+                if(x < selected->x + 145 && selected->x + 55 < x && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 1);
+                    return 1;
+                }
+            }
+            else if(isAmiga(selected, amigas) == 1)
+            {
+                if(x > selected->x - 145 && selected->x - 55 > x && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+            else if(isAmiga(selected, amigas) == 0)
+            {
+                if(x < selected->x + 145 && selected->x + 55 < x && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 1);
+                    return 1;
+                }
+                if(x > selected->x - 145 && selected->x - 55 > x && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+        }
+        if(colision(selected, oponentes) == 1) //Si hay una ficha del oponente a la derecha
+        {
+            if(ComidaDisponible(selected, oponentes) == 1 || ComidaDisponible(selected, oponentes) == 3) //Si no se puede comer :(
+            {
+                if(isAmiga(selected, amigas) == 2) //Si tenemos una ficha amiga a la izquierda no hacemos nada
+                    return 0;
+                else // Si no
+                {
+                    if(x < selected -> x + 145 && x > selected -> x + 55 && y > selected->y - 145 && selected->y - 55 > y)
+                    {
+                        MovBlancasSinComida(selected, 0);
+                        return 1;
+                    }
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 1 && isAmiga(selected, amigas) == 2 && isAmigaLejana(selected, amigas) == 1)
+                return 0;
+            else if(ComidaDisponible(selected, oponentes) != 1 && (isAmigaLejana(selected, amigas) == 1 || isAmigaLejana(selected, amigas) == 3))
+            {
+                if(x > selected -> x - 145 && x < selected -> x - 55 && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 0);
+                    return 1;
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 1 && isAmiga(selected, amigas) == 2)
+            {
+                if(x < selected -> x + 245 && x > selected -> x + 155 && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 1);
+                    comerFNegraDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+            else
+            {
+                if(x > selected -> x - 145 && x < selected -> x - 55 && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 0);
+                    return 1;
+                }
+                if(x < selected -> x + 245 && x > selected -> x + 155 && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 1);
+                    comerFNegraDerecha(selected, oponentes);
+                    return 1;
+                }
+            }
+        }
+        if(colision(selected, oponentes) == 2) //Cuando hay una ficha oponente a nuestra izquierda
+        {
+            if(ComidaDisponible(selected, oponentes) == 2 || ComidaDisponible(selected, oponentes) == 3) //Si no se puede comer :(
+            {
+                if(isAmiga(selected, amigas) == 1) //Si la que estA a la derecha es una ficha amiga
+                    return 0;
+                else
+                {
+                    if(x < selected -> x + 145 && x > selected -> x + 55 && y > selected->y - 145 && selected->y - 55 > y)
+                    {
+                        MovBlancasSinComida(selected, 1);
+                        return 1;
+                    }
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 2 && isAmiga(selected, amigas) == 1 && isAmigaLejana(selected, amigas) == 2)
+                return 0;
+            else if(ComidaDisponible(selected, oponentes) != 2 && (isAmigaLejana(selected, amigas) == 2 || isAmigaLejana(selected, amigas) == 3))
+            {
+                if(x < selected -> x + 145 && x > selected -> x + 55 && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 1);
+                    return 1;
+                }
+            }
+            else if(ComidaDisponible(selected, oponentes) != 2 && isAmiga(selected, amigas) == 1) //Si es posible comer esa ficha a la izquierda y tenemos una amiga a la derecha
+            {
+                if(x > selected -> x - 245 && x < selected -> x - 155 && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 0);
+                    comerFNegraIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+            else
+            {
+                if(x < selected -> x + 145 && x > selected -> x + 55 && y > selected->y - 145 && selected->y - 55 > y)
+                {
+                    MovBlancasSinComida(selected, 1);
+                    return 1;
+                }
+                if(x > selected -> x - 245 && x < selected -> x - 155 && y > selected->y - 245 && selected->y - 155 > y)
+                {
+                    MovBlancasConComida(selected, 0);
+                    comerFNegraIzquierda(selected, oponentes);
+                    return 1;
+                }
+            }
+
+        }
+    }
+}
 
 
 
