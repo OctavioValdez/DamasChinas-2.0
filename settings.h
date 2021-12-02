@@ -11,10 +11,10 @@ void Display(Ficha * fichas);
 void addF(Ficha * ficha,int x, int y, int id);
 Ficha* DetectF(int x, int y,Ficha* ficha);
 void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas);
-int PosDiagonalB(int x, int y, Ficha* selected, Ficha* amigas);
-int PosDiagonalN(int x, int y, Ficha* selected, Ficha* amigas);
+int PosDiagonalB(int x, int y, Ficha* selected, Ficha* amigas, Ficha* oponentes);
+int PosDiagonalN(int x, int y, Ficha* selected, Ficha* amigas, Ficha* oponentes);
 int comerf(Ficha* player, Ficha* fichas, int x, int y);
 int colision(Ficha* player, Ficha* fichas);
 void add(Ficha* stack, Ficha* fichas);
-Ficha* stack();
+int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Ficha* amigas);
 #endif //PROYECTOPROGRA_SETTINGS_H
