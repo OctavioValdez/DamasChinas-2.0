@@ -40,6 +40,7 @@ int main(void)
                 CirculosR(selected, Blancas, Negras);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
+                    Display(selected);
                     if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, Blancas) != 1)
                     {
                         winner = getWinner(Blancas, Negras);
