@@ -19,6 +19,7 @@ int main(void)
     Ficha * Negras = Crear_fichas(1);
     Ficha * Blancas = Crear_fichas(2);
     int turno = 0;
+    int winner = getWinner(Blancas, Negras);
 
     Ficha *selected = NULL;
 
@@ -39,8 +40,14 @@ int main(void)
                 CirculosR(selected, Blancas, Negras);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
+                    Display(selected);
                     if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, Blancas) != 1)
                     {
+                        winner = getWinner(Blancas, Negras);
+                        if(winner == 2)
+                        {
+                            DrawText("GANARON LAS NEGRAS", 200, 400, 45, BLACK);
+                        }
                         turno = 0;
                     }
                     else
@@ -65,6 +72,11 @@ int main(void)
                     // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
                     if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, Negras) != 1)
                     {
+                        winner = getWinner(Blancas, Negras);
+                        if(winner == 1)
+                        {
+                            DrawText("GANARON LAS BLANCAS", 200, 400, 45, WHITE);
+                        }
                         turno = 1;
                     }
                     else
