@@ -440,8 +440,17 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
                 return; //Salimos de la funciOn
             if(ComidaDisponible(player, oponentes) == 0) //Si ambas fichas se pueden comer :)
             {
-                DrawCircle(player->x - 200, player->y + 200, 45, RED);
-                DrawCircle(player->x + 200, player->y + 200, 45, RED);
+                if(isAmigaLejana(player, amigas) == 0)
+                {
+                    DrawCircle(player->x - 200, player->y + 200, 45, RED);
+                    DrawCircle(player->x + 200, player->y + 200, 45, RED);
+                }
+                else if(isAmigaLejana(player, amigas) == 3)
+                    return;
+                else if(isAmigaLejana(player, amigas) == 2)
+                    DrawCircle(player->x + 200, player->y + 200, 45, RED);
+                else if(isAmigaLejana(player, amigas) == 1)
+                    DrawCircle(player->x - 200, player->y + 200, 45, RED);
             }
         }
         if(colision(player, oponentes) == 1) //Si hay una ficha del oponente a la derecha
@@ -459,7 +468,7 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
                 DrawCircle(player->x - 100, player->y + 100, 45, RED);
             else if(ComidaDisponible(player, oponentes) != 1 && isAmiga(player, amigas) == 2)
                 DrawCircle(player->x + 200, player->y + 200, 45, RED);
-            else
+            else if(ComidaDisponible(player, oponentes) != 1)
             {
                 DrawCircle(player->x + 200, player->y + 200, 45, RED);
                 DrawCircle(player->x - 100, player->y + 100, 45, RED);
@@ -482,7 +491,7 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
             {
                 DrawCircle(player->x - 200, player->y + 200, 45, RED);
             }
-            else
+            else if(ComidaDisponible(player, oponentes) != 2)
             {
                 DrawCircle(player->x + 100, player->y + 100, 45, RED);
                 DrawCircle(player->x - 200, player->y + 200, 45, RED);
@@ -510,20 +519,29 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
     {
         if(colision(player, oponentes) == 3)
         {
-            if(ComidaDisponible(player, oponentes) == 1 && isAmigaLejana(player, oponentes) == 2) //Si la del lado derecho no se puede comer
+            if(ComidaDisponible(player, oponentes) == 1 && isAmigaLejana(player, amigas) == 2) //Si la del lado derecho no se puede comer
                 return;
-            if(ComidaDisponible(player, oponentes) == 1 && isAmigaLejana(player, oponentes) != 2)
+            if(ComidaDisponible(player, oponentes) == 1 && isAmigaLejana(player, amigas) != 2)
                 DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
-            if(ComidaDisponible(player, oponentes) == 2 && isAmigaLejana(player, oponentes) == 1) //Si la izquierda no se puede comer y a la derecha nos estorban
+            if(ComidaDisponible(player, oponentes) == 2 && isAmigaLejana(player, amigas) == 1) //Si la izquierda no se puede comer y a la derecha nos estorban
                 return;
-            if(ComidaDisponible(player, oponentes) == 2 && isAmigaLejana(player, oponentes) != 1)
+            if(ComidaDisponible(player, oponentes) == 2 && isAmigaLejana(player, amigas) != 1)
                 DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
             if(ComidaDisponible(player, oponentes) == 3) //Si ninguna se puede comer
                 return;
             if(ComidaDisponible(player, oponentes) == 0) //Si las dos estAn disfrutables :)
             {
-                DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
-                DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
+                if(isAmigaLejana(player, amigas) == 0)
+                {
+                    DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
+                    DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
+                }
+                else if(isAmigaLejana(player, amigas) == 3)
+                    return;
+                else if(isAmigaLejana(player, amigas) == 2)
+                    DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
+                else if(isAmigaLejana(player, amigas) == 1)
+                    DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
             }
 
         }
@@ -542,7 +560,7 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
                 DrawCircle(player -> x - 100, player -> y - 100, 45, RED);
             else if(ComidaDisponible(player, oponentes) != 1 && isAmiga(player, amigas) == 2)
                 DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
-            else
+            else if(ComidaDisponible(player, oponentes) != 1)
             {
                 DrawCircle(player -> x - 100, player -> y - 100, 45, RED);
                 DrawCircle(player -> x + 200, player -> y - 200, 45, RED);
@@ -563,7 +581,7 @@ void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas)
                 DrawCircle(player -> x + 100, player -> y - 100, 45, RED);
             else if(ComidaDisponible(player, oponentes) != 2 && isAmiga(player, amigas) == 1)
                 DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
-            else
+            else if(ComidaDisponible(player, oponentes) != 2)
             {
                 DrawCircle(player -> x - 200, player -> y - 200, 45, RED);
                 DrawCircle(player -> x + 100, player -> y - 100, 45, RED);
@@ -733,13 +751,13 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                 return 0; //Salimos de la funciOn
             if(ComidaDisponible(selected, oponentes) == 0) //Si ambas fichas se pueden comer :)
             {
-                if(x > selected->x - 245 && selected->x - 155 > x && y < selected->y + 245 && selected->y + 155 < y)
+                if(x > selected->x - 245 && selected->x - 155 > x && y < selected->y + 245 && selected->y + 155 < y && isAmigaLejana(selected, amigas) != 2)
                 {
                     MovNegrasConComida(selected, 0);
                     comerFBlancaIzquierda(selected, oponentes);
                     return 1;
                 }
-                if(x < selected->x + 245 && selected->x + 155 < x && y < selected->y + 245 && selected->y + 155 < y)
+                if(x < selected->x + 245 && selected->x + 155 < x && y < selected->y + 245 && selected->y + 155 < y && isAmigaLejana(selected, amigas) != 1)
                 {
                     MovNegrasConComida(selected, 1);
                     comerFBlancaDerecha(selected, oponentes);
@@ -816,7 +834,7 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                     return 1;
                 }
             }
-            else
+            else if(ComidaDisponible(selected, oponentes) != 1)
             {
                 if(x > selected -> x - 145 && x < selected -> x - 55 && y < selected->y + 145 && selected->y + 55 < y)
                 {
@@ -865,7 +883,7 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                     return 1;
                 }
             }
-            else
+            else if(ComidaDisponible(selected, oponentes) != 2)
             {
                 if(x < selected -> x + 145 && x > selected -> x + 55 && y < selected->y + 145 && selected->y + 55 < y)
                 {
@@ -913,13 +931,13 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                 return 0; //Salimos de la funciOn
             if(ComidaDisponible(selected, oponentes) == 0) //Si ambas fichas se pueden comer :)
             {
-                if(x > selected->x - 245 && selected->x - 155 > x && y > selected->y - 245 && selected->y - 155 > y)
+                if(x > selected->x - 245 && selected->x - 155 > x && y > selected->y - 245 && selected->y - 155 > y && isAmigaLejana(selected, amigas) != 2)
                 {
                     MovBlancasConComida(selected, 0);
                     comerFNegraIzquierda(selected, oponentes);
                     return 1;
                 }
-                if(x < selected->x + 245 && selected->x + 155 < x && y > selected->y - 245 && selected->y - 155 > y)
+                if(x < selected->x + 245 && selected->x + 155 < x && y > selected->y - 245 && selected->y - 155 > y && isAmigaLejana(selected, amigas) != 1)
                 {
                     MovBlancasConComida(selected, 1);
                     comerFNegraDerecha(selected, oponentes);
@@ -996,7 +1014,7 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                     return 1;
                 }
             }
-            else
+            else if(ComidaDisponible(selected, oponentes) != 1)
             {
                 if(x > selected -> x - 145 && x < selected -> x - 55 && y > selected->y - 145 && selected->y - 55 > y)
                 {
@@ -1045,7 +1063,7 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
                     return 1;
                 }
             }
-            else
+            else if(ComidaDisponible(selected, oponentes) != 2)
             {
                 if(x < selected -> x + 145 && x > selected -> x + 55 && y > selected->y - 145 && selected->y - 55 > y)
                 {
@@ -1063,11 +1081,3 @@ int MovimientoValido(int x, int y, Ficha *selected, Ficha* amigas, Ficha* oponen
         }
     }
 }
-
-
-
-
-
-
-
-
