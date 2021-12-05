@@ -17,4 +17,5 @@ int comerf(Ficha* player, Ficha* fichas, int x, int y);
 int colision(Ficha* player, Ficha* fichas);
 void add(Ficha* stack, Ficha* fichas);
 int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Ficha* amigas);
+int getWinner(Ficha* Blancas, Ficha* Negras);
 #endif //PROYECTOPROGRA_SETTINGS_H
