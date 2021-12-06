@@ -13,16 +13,15 @@ int main(void)
     BAGE.r = 207;
     BAGE.g = 185;
     BAGE.b = 151;
-
-    InitWindow(screenWidth, screenHeight, "Damas Chinas");
-
-    SetTargetFPS(20);
     Ficha * Negras = Crear_fichas(1);
     Ficha * Blancas = Crear_fichas(2);
     Tablero* tab = Crear_tab();
     Llenar_tab(tab);
     Llenar_disponibles(tab, Negras);
     Llenar_disponibles(tab, Blancas);
+
+    InitWindow(screenWidth, screenHeight, "Damas Chinas");
+    SetTargetFPS(20);
     int winner = getWinner(Blancas, Negras, tab);
     int turno = 0;
 
@@ -37,8 +36,12 @@ int main(void)
         BeginDrawing();
         ClearBackground(BAGE);
         TableroDisplay(screenWidth,screenHeight);
-        DibujarFichas(Negras, BLACK);
-        DibujarFichas(Blancas, WHITE);
+        DibujarFichas(Negras, BLACK, tab);
+        DibujarFichas(Blancas, WHITE, tab);
+        if(IsKeyPressed(KEY_A))
+        {
+            display_tab(tab);
+        }
         if(turno == 0)
         {
             if(selected)

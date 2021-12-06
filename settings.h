@@ -8,7 +8,7 @@ typedef struct tablero Tablero;
 
 void TableroDisplay(int width,int height);
 Ficha *Crear_fichas(int C);
-void DibujarFichas(Ficha * fichas, color C);
+void DibujarFichas(Ficha * fichas, color C, Tablero* tab);
 void Display(Ficha * fichas);
 Ficha* DetectF(int x, int y,Ficha* ficha);
 void CirculosR(Ficha *player, Tablero* tab);
