@@ -83,7 +83,8 @@ int main(void)
                         {
                             DrawText("GANARON LAS BLANCAS", 200, 400, 36 , WHITE);
                         }
-                        turno = 1;
+                        else
+                            turno = 1;
                     }
                     else
                         turno = 0;

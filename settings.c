@@ -237,9 +237,10 @@ void DibujarFichas(Ficha * fichas, color C)
     {
         if(Current -> vida == 0)
         {
-            Current -> x = 1000;
-            Current -> y = 1000;
+            Current -> x = 100000;
+            Current -> y = 100000;
             Current = Current -> sig;
+            continue;
         }
         isReina(Current);
         if(Current == NULL)
@@ -639,6 +640,10 @@ int comidaDisponible(Ficha* player, Tablero* tab)
         int pos_izq = pos_arr + 14;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 650 || player -> y == 750)
+            return 0;
+
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -655,8 +660,7 @@ int comidaDisponible(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 650 || player -> y == 750)
-            return 0;
+
 
         if(tab -> Tablero[pos_der] -> Disponible == 1)
         {
@@ -773,6 +777,9 @@ int comidaDisponible(Ficha* player, Tablero* tab)
         int pos_izq = pos_arr - 18;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 150 || player -> y == 50)
+            return 0;
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -789,8 +796,6 @@ int comidaDisponible(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 150 || player -> y == 50)
-            return 0;
 
         if(tab -> Tablero[pos_der] -> Disponible == 1)
         {
@@ -986,6 +991,9 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         int pos_izq = pos_arr + 14;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 650 || player -> y == 750)
+            return 0;
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 2)
@@ -1002,8 +1010,7 @@ int isAmigalejana(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 650 || player -> y == 750)
-            return 0;
+
 
         if(tab -> Tablero[pos_der] -> Disponible == 2)
         {
@@ -1074,6 +1081,9 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         int pos_izq = pos_arr - 18;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 150 || player -> y == 50)
+            return 0;
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -1090,8 +1100,7 @@ int isAmigalejana(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 150 || player -> y == 50)
-            return 0;
+
 
         if(tab -> Tablero[pos_der] -> Disponible == 1)
         {
@@ -1117,6 +1126,9 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         int pos_izq = pos_arr - 18;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 150 || player -> y == 50)
+            return 0;
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 2)
@@ -1133,8 +1145,8 @@ int isAmigalejana(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 150 || player -> y == 50)
-            return 0;
+
+
 
         if(tab -> Tablero[pos_der] -> Disponible == 2)
         {
@@ -1450,9 +1462,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                         eliminarf(player, tab);
                         return 1;
                     }
-
                 }
-
             }
         }
     }
@@ -2015,8 +2025,8 @@ int movimientosDisponibles(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 
 int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 {
-    Ficha* CurrentB = Blancas -> sig;
-    Ficha *CurrentN = Negras -> sig;
+    Ficha* CurrentB = Blancas -> sig ? Blancas -> sig: Blancas;
+    Ficha *CurrentN = Negras -> sig ? Negras -> sig: Negras;
 
     if(CurrentN == NULL || CurrentB == NULL)
         return 0;
@@ -2026,8 +2036,9 @@ int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
     while (CurrentN != NULL)
     {
         if(CurrentN -> vida == 0)
-            CurrentN ++;
+            contN++;
         CurrentN = CurrentN -> sig;
+
     }
     while (CurrentB != NULL)
     {
@@ -2042,3 +2053,6 @@ int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
         return 2;
     return 0;
 }
+
+// Archivos
+
