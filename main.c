@@ -23,7 +23,7 @@ int main(void)
     Llenar_tab(tab);
     Llenar_disponibles(tab, Negras);
     Llenar_disponibles(tab, Blancas);
-//    int winner = getWinner(Blancas, Negras, tab);
+    int winner = getWinner(Blancas, Negras, tab);
     int turno = 0;
 
 
@@ -48,7 +48,13 @@ int main(void)
                 {
                     if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, tab) != 1)
                     {
-                        turno = 0;
+                        winner = getWinner(Blancas, Negras, tab);
+                        if(winner == 1)
+                        {
+                            DrawText("GANARON LAS NEGRAS", 200, 400, 36 , BLACK);
+                        }
+                        else
+                            turno = 0;
                     }
                     else
                         turno = 1;
@@ -72,6 +78,11 @@ int main(void)
                     // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
                     if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, tab) != 1)
                     {
+                        winner = getWinner(Blancas, Negras, tab);
+                        if(winner == 2)
+                        {
+                            DrawText("GANARON LAS BLANCAS", 200, 400, 36 , WHITE);
+                        }
                         turno = 1;
                     }
                     else

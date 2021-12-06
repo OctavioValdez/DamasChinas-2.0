@@ -35,6 +35,8 @@ struct tablero
 
 void isReina(Ficha* player)
 {
+    if(player == NULL)
+        return;
     if(player -> dir == 0)
     {
         if(player -> y == 750)
@@ -229,6 +231,7 @@ Ficha *Crear_fichas(int C) {
 
 void DibujarFichas(Ficha * fichas, color C)
 {
+
     Ficha* Current = fichas -> sig;
     while(Current != NULL)
     {
@@ -239,6 +242,8 @@ void DibujarFichas(Ficha * fichas, color C)
             Current = Current -> sig;
         }
         isReina(Current);
+        if(Current == NULL)
+            return;
         DrawCircle(Current->x,Current->y, 45, C);
         Current = Current -> sig;
     }
@@ -368,19 +373,28 @@ void MovNegrasConComida(Ficha *player, int dir, Tablero* tab)
     }
 }
 
-void eliminarf(Ficha* ficha)
+void eliminarf(Ficha* ficha, Tablero* tab)
 {
+    int arr_poss = get_pos_arr(ficha, tab);
+    tab -> Tablero[arr_poss] -> Disponible = 0;
     ficha -> vida = 0;
 }
 
 int comerFNegraDerecha(Ficha* player, Ficha* oponente, Tablero* tab)
 {
-    Ficha* ficha = DetectF(player -> x - 100, player -> y + 100, oponente);
-    int pos_arr = get_pos_arr(ficha, tab);
+    Ficha* ficha = oponente -> sig;
+    int x = player -> x - 100;
+    int y = player -> y + 100;
+    while(ficha != NULL)
+    {
+        if(ficha -> x == x && ficha -> y == y)
+            break;
+        ficha = ficha -> sig;
+    }
     if(ficha != NULL)
     {
-        eliminarf(ficha);
-        tab -> Tablero[pos_arr] -> Disponible = 0;
+        int pos_arr = get_pos_arr(ficha, tab);
+        eliminarf(ficha, tab);
         return 1;
     }
     else
@@ -389,12 +403,19 @@ int comerFNegraDerecha(Ficha* player, Ficha* oponente, Tablero* tab)
 
 int comerFNegraIzquierda(Ficha* player, Ficha* oponente, Tablero* tab)
 {
-    Ficha* ficha = DetectF(player -> x + 100, player -> y + 100, oponente);
-    int pos_arr = get_pos_arr(ficha, tab);
+    Ficha* ficha = oponente -> sig;
+    int x = player -> x + 100;
+    int y = player -> y + 100;
+    while(ficha != NULL)
+    {
+        if(ficha -> x == x && ficha -> y == y)
+            break;
+        ficha = ficha -> sig;
+    }
     if(ficha != NULL)
     {
-        eliminarf(ficha);
-        tab -> Tablero[pos_arr] -> Disponible = 0;
+        int pos_arr = get_pos_arr(ficha, tab);
+        eliminarf(ficha, tab);
         return 1;
     }
     else
@@ -403,12 +424,19 @@ int comerFNegraIzquierda(Ficha* player, Ficha* oponente, Tablero* tab)
 
 int comerFBlancaDerecha(Ficha* player, Ficha* oponente, Tablero* tab)
 {
-    Ficha* ficha = DetectF(player -> x - 100, player -> y - 100, oponente);
-    int pos_arr = get_pos_arr(ficha, tab);
+    Ficha* ficha = oponente -> sig;
+    int x = player -> x - 100;
+    int y = player -> y - 100;
+    while(ficha != NULL)
+    {
+        if(ficha -> x == x && ficha -> y == y)
+            break;
+        ficha = ficha -> sig;
+    }
     if(ficha != NULL)
     {
-        eliminarf(ficha);
-        tab -> Tablero[pos_arr] -> Disponible = 0;
+        int pos_arr = get_pos_arr(ficha, tab);
+        eliminarf(ficha, tab);
         return 1;
     }
     else
@@ -417,12 +445,20 @@ int comerFBlancaDerecha(Ficha* player, Ficha* oponente, Tablero* tab)
 
 int comerFBlancaIzquierda(Ficha* player, Ficha* oponente, Tablero* tab)
 {
-    Ficha* ficha = DetectF(player -> x + 100, player-> y - 100, oponente);
-    int pos_arr = get_pos_arr(ficha, tab);
+
+    Ficha* ficha = oponente -> sig;
+    int x = player -> x + 100;
+    int y = player -> y - 100;
+    while(ficha != NULL)
+    {
+        if(ficha -> x == x && ficha -> y == y)
+            break;
+        ficha = ficha -> sig;
+    }
     if(ficha != NULL)
     {
-        eliminarf(ficha);
-        tab -> Tablero[pos_arr] -> Disponible = 0;
+        int pos_arr = get_pos_arr(ficha, tab);
+        eliminarf(ficha, tab);
         return 1;
     }
     else
@@ -432,7 +468,46 @@ int comerFBlancaIzquierda(Ficha* player, Ficha* oponente, Tablero* tab)
 int colision(Ficha *player, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
+    if(player -> dir == 0 && player -> col == 'B')
+    {
+        int pos_izq = pos_arr + 7;
+        int pos_der = pos_arr + 9;
+        int band_der = 0;
+        int band_izq = 0;
+        if(player -> x == 50)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            {
+                return 1;
+            }
+            else
+                return 0;
+        }
+        if(player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        {
+            band_izq = 1;
+        }
+        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        {
+            band_der = 1;
+        }
 
+        if(band_der == 1 && band_izq == 1)
+            return 3;
+        if(band_izq == 1)
+            return 2;
+        if(band_der == 1)
+            return 1;
+        return 0;
+    }
     if(player -> dir == 0)
     {
         int pos_izq = pos_arr + 7;
@@ -446,6 +521,47 @@ int colision(Ficha *player, Tablero* tab)
                 return 1;
             }
             else
+                return 0;
+        }
+        if(player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(player -> y == 750)
+            return 0;
+        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        {
+            band_izq = 1;
+        }
+        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        {
+            band_der = 1;
+        }
+
+        if(band_der == 1 && band_izq == 1)
+            return 3;
+        if(band_izq == 1)
+            return 2;
+        if(band_der == 1)
+            return 1;
+        return 0;
+    }
+    if(player -> dir == 1 && player -> col == 'N')
+    {
+        int pos_izq = pos_arr - 9;
+        int pos_der = pos_arr - 7;
+        int band_der = 0;
+        int band_izq = 0;
+        if(player -> x == 50)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            {
+                return 1;
+            } else
                 return 0;
         }
         if(player -> x == 750)
@@ -473,7 +589,7 @@ int colision(Ficha *player, Tablero* tab)
             return 1;
         return 0;
     }
-    else
+    if(player -> dir == 1)
     {
         int pos_izq = pos_arr - 9;
         int pos_der = pos_arr - 7;
@@ -517,12 +633,59 @@ int colision(Ficha *player, Tablero* tab)
 int comidaDisponible(Ficha* player, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
+    if(player -> dir == 0 && player -> col == 'B')
+    {
+        int pos_der = pos_arr + 18;
+        int pos_izq = pos_arr + 14;
+        int ban_izq = 0;
+        int ban_der = 0;
+        if(player -> x == 50 || player -> x == 150)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            {
+                return 1;
+            } else
+                return 0;
+        }
+        if(player -> x == 650 || player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(player -> y == 650 || player -> y == 750)
+            return 0;
+
+        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        {
+            ban_der = 1;
+        }
+
+        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        {
+            ban_izq = 1;
+        }
+
+        if(ban_der == 1 && ban_izq == 1)
+            return 3;
+        if(ban_der == 1)
+            return 1;
+        if(ban_izq == 1)
+            return 2;
+        return 0;
+    }
     if(player -> dir == 0)
     {
         int pos_der = pos_arr + 18;
         int pos_izq = pos_arr + 14;
         int ban_izq = 0;
         int ban_der = 0;
+
+        if(player -> y == 650 || player -> y == 750)
+            return 0;
+
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 2)
@@ -539,8 +702,7 @@ int comidaDisponible(Ficha* player, Tablero* tab)
             } else
                 return 0;
         }
-        if(player -> y == 650 || player -> y == 750)
-            return 0;
+
 
         if(tab -> Tablero[pos_der] -> Disponible == 2)
         {
@@ -560,7 +722,52 @@ int comidaDisponible(Ficha* player, Tablero* tab)
             return 2;
         return 0;
     }
-    else
+    if(player -> dir == 1 && player -> col == 'N')
+    {
+        int pos_der = pos_arr - 14;
+        int pos_izq = pos_arr - 18;
+        int ban_izq = 0;
+        int ban_der = 0;
+
+        if(player -> y == 150 || player -> y == 50)
+            return 0;
+        if(player -> x == 50 || player -> x == 150)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            {
+                return 1;
+            } else
+                return 0;
+        }
+        if(player -> x == 650 || player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+
+
+        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        {
+            ban_der = 1;
+        }
+
+        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        {
+            ban_izq = 1;
+        }
+
+        if(ban_der == 1 && ban_izq == 1)
+            return 3;
+        if(ban_der == 1)
+            return 1;
+        if(ban_izq == 1)
+            return 2;
+        return 0;
+    }
+    if(player -> dir == 1)
     {
         int pos_der = pos_arr - 14;
         int pos_izq = pos_arr - 18;
@@ -608,12 +815,54 @@ int comidaDisponible(Ficha* player, Tablero* tab)
 int isAmiga(Ficha* player, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
+    if(player -> dir == 0 && player -> col == 'B')
+    {
+        int pos_izq = pos_arr + 7;
+        int pos_der = pos_arr + 9;
+        int band_der = 0;
+        int band_izq = 0;
+        if(player -> x == 50)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            {
+                return 1;
+            }
+            else
+                return 0;
+        }
+        if(player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        {
+            band_izq = 1;
+        }
+        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        {
+            band_der = 1;
+        }
+
+        if(band_der == 1 && band_izq == 1)
+            return 3;
+        if(band_izq == 1)
+            return 2;
+        if(band_der == 1)
+            return 1;
+        return 0;
+    }
     if(player -> dir == 0)
     {
         int pos_izq = pos_arr + 7;
         int pos_der = pos_arr + 9;
         int band_der = 0;
         int band_izq = 0;
+        if(player -> y == 750)
+            return 0;
         if(player -> x == 50)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -648,7 +897,46 @@ int isAmiga(Ficha* player, Tablero* tab)
             return 1;
         return 0;
     }
-    else
+    if(player -> dir == 1 && player -> col == 'N')
+    {
+        int pos_izq = pos_arr - 9;
+        int pos_der = pos_arr - 7;
+        int band_der = 0;
+        int band_izq = 0;
+        if(player -> x == 50)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            {
+                return 1;
+            } else
+                return 0;
+        }
+        if(player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        {
+            band_izq = 1;
+        }
+        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        {
+            band_der = 1;
+        }
+
+        if(band_der == 1 && band_izq == 1)
+            return 3;
+        if(band_izq == 1)
+            return 2;
+        if(band_der == 1)
+            return 1;
+        return 0;
+    }
+    if(player -> dir == 1)
     {
         int pos_izq = pos_arr - 9;
         int pos_der = pos_arr - 7;
@@ -692,12 +980,57 @@ int isAmiga(Ficha* player, Tablero* tab)
 int isAmigalejana(Ficha* player, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
+    if(player -> dir == 0 && player -> col == 'B')
+    {
+        int pos_der = pos_arr + 18;
+        int pos_izq = pos_arr + 14;
+        int ban_izq = 0;
+        int ban_der = 0;
+        if(player -> x == 50 || player -> x == 150)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            {
+                return 1;
+            } else
+                return 0;
+        }
+        if(player -> x == 650 || player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(player -> y == 650 || player -> y == 750)
+            return 0;
+
+        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        {
+            ban_der = 1;
+        }
+
+        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        {
+            ban_izq = 1;
+        }
+
+        if(ban_der == 1 && ban_izq == 1)
+            return 3;
+        if(ban_der == 1)
+            return 1;
+        if(ban_izq == 1)
+            return 2;
+        return 0;
+    }
     if(player -> dir == 0)
     {
         int pos_der = pos_arr + 18;
         int pos_izq = pos_arr + 14;
         int ban_izq = 0;
         int ban_der = 0;
+        if(player -> y == 750 || player -> y == 650)
+            return 0;
         if(player -> x == 50 || player -> x == 150)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -735,7 +1068,50 @@ int isAmigalejana(Ficha* player, Tablero* tab)
             return 2;
         return 0;
     }
-    else
+    if(player -> dir == 1 && player -> col == 'N')
+    {
+        int pos_der = pos_arr - 14;
+        int pos_izq = pos_arr - 18;
+        int ban_izq = 0;
+        int ban_der = 0;
+        if(player -> x == 50 || player -> x == 150)
+        {
+            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            {
+                return 1;
+            } else
+                return 0;
+        }
+        if(player -> x == 650 || player -> x == 750)
+        {
+            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            {
+                return 2;
+            } else
+                return 0;
+        }
+        if(player -> y == 150 || player -> y == 50)
+            return 0;
+
+        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        {
+            ban_der = 1;
+        }
+
+        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        {
+            ban_izq = 1;
+        }
+
+        if(ban_der == 1 && ban_izq == 1)
+            return 3;
+        if(ban_der == 1)
+            return 1;
+        if(ban_izq == 1)
+            return 2;
+        return 0;
+    }
+    if(player -> dir == 1)
     {
         int pos_der = pos_arr - 14;
         int pos_izq = pos_arr - 18;
@@ -891,8 +1267,15 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
             {
                 if(x > player -> x - 145 && x < player -> x - 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
-                    eliminarf(player);
-                    return 1;
+                    if(player -> x == 650 || (player -> y == 650))
+                    {
+                        MovNegrasSinComida(player, 0, tab);
+                        return 1;
+                    } else
+                    {
+                        eliminarf(player, tab);
+                        return 1;
+                    }
                 }
 
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
@@ -906,7 +1289,7 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 
         }
     }
-    else
+    if(player -> dir == 1)
     {
         if((Comida == 1 || Comida == 3) || (AmigaL == 1 || AmigaL == 3))
         {
@@ -944,8 +1327,15 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
                 if(x > player -> x - 145 && x < player -> x - 55 && y > player -> y - 145 && y < player -> y - 55)
                 {
-                    eliminarf(player);
-                    return 1;
+                    if(player -> x == 650 || player -> y == 150)
+                    {
+                        MovBlancasSinComida(player,0, tab);
+                        return 1;
+                    }else
+                    {
+                        eliminarf(player, tab);
+                        return 1;
+                    }
                 }
             }
 
@@ -998,8 +1388,15 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                 }
                 if(x < player -> x + 145 && x > player -> x + 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
-                    eliminarf(player);
-                    return 1;
+                    if(player -> x == 150 || player -> y == 650)
+                    {
+                        MovNegrasSinComida(player, 1, tab);
+                        return 1;
+                    } else
+                    {
+                        eliminarf(player, tab);
+                        return 1;
+                    }
                 }
 
             }
@@ -1044,8 +1441,16 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
 
                 if(x < player -> x + 145 && x > player -> x + 55 && y > player -> y -145 && y < player -> y - 55)
                 {
-                    eliminarf(player);
-                    return 1;
+                    if(player -> x == 150 || player -> y == 150)
+                    {
+                        MovBlancasSinComida(player, 1, tab);
+                        return 1;
+                    }else
+                    {
+                        eliminarf(player, tab);
+                        return 1;
+                    }
+
                 }
 
             }
@@ -1065,7 +1470,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 
         if(Comida == 0 && AmigaL == 0)
         {
-            if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 255)
+            if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
             {
                 MovNegrasConComida(player, 1, tab);
                 comerFBlancaDerecha(player, oponentes, tab);
@@ -1108,7 +1513,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(AmigaL == 0)
             {
-                if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 255)
+                if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
                     comerFBlancaDerecha(player, oponentes, tab);
@@ -1120,7 +1525,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(Comida == 0)
             {
-                if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 255)
+                if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
                     comerFBlancaDerecha(player, oponentes, tab);
@@ -1610,21 +2015,13 @@ int movimientosDisponibles(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 
 int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 {
-    Ficha* CurrentB = Blancas;
-    CurrentB = CurrentB -> sig;
-    Ficha *CurrentN = Negras;
-    CurrentN = CurrentN -> sig;
+    Ficha* CurrentB = Blancas -> sig;
+    Ficha *CurrentN = Negras -> sig;
+
+    if(CurrentN == NULL || CurrentB == NULL)
+        return 0;
     int contB = 0;
     int contN = 0;
-
-    if(movimientosDisponibles(Blancas -> sig, Negras -> sig, tab) == 1)
-    {
-        return 1;
-    }
-    if(movimientosDisponibles(Blancas -> sig, Negras -> sig, tab) == 2)
-    {
-        return 2;
-    }
 
     while (CurrentN != NULL)
     {
