@@ -21,6 +21,7 @@ struct Cuadro
     int Disponible;
     int x;
     int y;
+    char col;
 
 }typedef cuadro;
 
@@ -144,9 +145,17 @@ void Llenar_disponibles(Tablero* tab, Ficha* fichas)
             if(tab -> Tablero[i] -> x == current -> x && tab -> Tablero[i] -> y == current -> y)
             {
                 if(current -> id < 12)
+                {
                     tab -> Tablero[i] -> Disponible = 1;
+                    tab -> Tablero[i] -> col = 'N';
+                }
+
                 if(current -> id >= 12)
+                {
                     tab -> Tablero[i] -> Disponible = 2;
+                    tab -> Tablero[i] -> col = 'B';
+                }
+
             }
         }
         current = current -> sig;
