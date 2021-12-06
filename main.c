@@ -2,6 +2,7 @@
 #include "settings.h"
 #include <stdio.h>
 
+
 int main(void)
 {
     // Initialization
@@ -18,8 +19,13 @@ int main(void)
     SetTargetFPS(20);
     Ficha * Negras = Crear_fichas(1);
     Ficha * Blancas = Crear_fichas(2);
+    Tablero* tab = Crear_tab();
+    Llenar_tab(tab);
+    Llenar_disponibles(tab, Negras);
+    Llenar_disponibles(tab, Blancas);
+//    int winner = getWinner(Blancas, Negras, tab);
     int turno = 0;
-    int winner = getWinner(Blancas, Negras);
+
 
     Ficha *selected = NULL;
 
@@ -37,17 +43,11 @@ int main(void)
         {
             if(selected)
             {
-                CirculosR(selected, Blancas, Negras);
+                CirculosR(selected,tab);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
-                    Display(selected);
-                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, Blancas) != 1)
+                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, tab) != 1)
                     {
-                        winner = getWinner(Blancas, Negras);
-                        if(winner == 2)
-                        {
-                            DrawText("GANARON LAS NEGRAS", 200, 400, 45, BLACK);
-                        }
                         turno = 0;
                     }
                     else
@@ -65,18 +65,13 @@ int main(void)
             if(selected)
             {
                 // aqui ya tenemos una ficha seleccionada, que queremos hacer con ella
-                CirculosR(selected, Negras, Blancas);
+                CirculosR(selected, tab);
                 if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                 {
                     // aqui posiblemente queremos revisar si el siguiente click del usuario es
                     // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
-                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, Negras) != 1)
+                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, tab) != 1)
                     {
-                        winner = getWinner(Blancas, Negras);
-                        if(winner == 1)
-                        {
-                            DrawText("GANARON LAS BLANCAS", 200, 400, 45, WHITE);
-                        }
                         turno = 1;
                     }
                     else
