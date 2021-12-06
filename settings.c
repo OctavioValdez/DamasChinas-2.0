@@ -484,6 +484,10 @@ int colision(Ficha *player, Tablero* tab)
         int pos_der = pos_arr + 9;
         int band_der = 0;
         int band_izq = 0;
+
+        if(player -> y == 750)
+            return 0;
+
         if(player -> x == 50)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
@@ -566,6 +570,8 @@ int colision(Ficha *player, Tablero* tab)
         int pos_der = pos_arr - 7;
         int band_der = 0;
         int band_izq = 0;
+        if(player -> y == 50)
+            return 0;
         if(player -> x == 50)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 2)
@@ -917,6 +923,8 @@ int isAmiga(Ficha* player, Tablero* tab)
         int pos_der = pos_arr - 7;
         int band_der = 0;
         int band_izq = 0;
+        if(player -> y == 50)
+            return 0;
         if(player -> x == 50)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1)
