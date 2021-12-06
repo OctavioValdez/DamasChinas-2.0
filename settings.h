@@ -3,19 +3,19 @@
 
 typedef struct Color color;
 typedef struct ficha Ficha;
+typedef struct tablero Tablero;
+
 
 void TableroDisplay(int width,int height);
 Ficha *Crear_fichas(int C);
 void DibujarFichas(Ficha * fichas, color C);
 void Display(Ficha * fichas);
-void addF(Ficha * ficha,int x, int y, int id);
 Ficha* DetectF(int x, int y,Ficha* ficha);
-void CirculosR(Ficha *player, Ficha* oponentes, Ficha* amigas);
-int PosDiagonalB(int x, int y, Ficha* selected, Ficha* amigas, Ficha* oponentes);
-int PosDiagonalN(int x, int y, Ficha* selected, Ficha* amigas, Ficha* oponentes);
-int comerf(Ficha* player, Ficha* fichas, int x, int y);
-int colision(Ficha* player, Ficha* fichas);
-void add(Ficha* stack, Ficha* fichas);
-int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Ficha* amigas);
-int getWinner(Ficha* Blancas, Ficha* Negras);
+void CirculosR(Ficha *player, Tablero* tab);
+int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab);
+int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab);
+Tablero *Crear_tab();
+void Llenar_tab(Tablero* tab);
+void Llenar_disponibles(Tablero* tab, Ficha* fichas);
+void display_tab(Tablero* tab);
 #endif //PROYECTOPROGRA_SETTINGS_H
