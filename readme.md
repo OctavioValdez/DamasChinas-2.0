@@ -83,5 +83,11 @@ EXPLICACION DE LAS FUNCIONES:
 
 --getWinner recibe tambien las fichas blancas, las fichas negras y el tablero, cuenta cuantas fichas aun tienen vida, y si todas las fichas negras estan muertas retornamos 2, si las fichas blancas estan muertas retornamos 1, y si no esta muerto el total de ninguna de las dos retornamos 0.
 
+--menu no recibe ningun parametro, solo dibuja anuncios al inicio de una partida mostrando las opciones que se pueden realizar (juego nuevo, cargar juego).
+
+--saveGame recibe como parametros las fichas blancas, las fichas negras, el turno y el tablero. Creamos varios arreglos donde guardamos todos los atributos de las estructuras de ficha de todas las fichas, ademas creamos un arreglo con el turno donde nos habiamos quedado, luego de eso fuimos guardando toda la informacion de las fichas una por una en el achivo.
+
+--loadGame tambien recibe fichas blancas, negras , el turno y el tablero. Tambien se crea un arreglo donde se guardara toda la informacion de las fichas y el turno, luego de eso se lee una por una para poder añadirle la informacion a cada ficha del juego en el que se va a cargar.
+
 
 
