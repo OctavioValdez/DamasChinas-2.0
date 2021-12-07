@@ -47,7 +47,7 @@ EXPLICACION DE LAS FUNCIONES:
 
 --MovNegrasSinComida y MovNegrasConComida funcionan igual que las funciones de las fichas blancas y reciben los mismos parametros.
 
---eliminarf recibe una ficha en especifico y el tablero, tomamos la posicion de dicha ficha dentro de nuestro tablero y cambiamos su disponibilidad a 0 (o sea que ya no hay nada), y cambia el atributo vida de la ficha a 0, con lo que se dejara de dibujar gracias a la funcion de 
+--eliminarf recibe una ficha en especifico y el tablero, tomamos la posicion de dicha ficha dentro de nuestro tablero y cambiamos su disponibilidad a 0 (o sea que ya no hay nada), y cambia el atributo vida de la ficha a 0, con lo que se dejara de dibujar gracias a la funcion de DibujarFichas
 
 --comerFNegraDerecha recibe las fichas del tipo que selecciono el usuario, las oponentes y el tablero, identificamos si que ficha habia cuando una ficha blanca hizo un movimiento de comida a la derecha, cambiamos su disponibilidad en el tablero y la eliminamos de la interfaz grafica.
 
