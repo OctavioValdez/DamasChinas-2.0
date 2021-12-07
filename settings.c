@@ -2318,6 +2318,10 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
     int vida[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int col [24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int trn [1] = {0};
+    int Dis_tab[64];
+    int x_tab[64];
+    int y_tab[64];
+    int reina[64];
 
     FILE* save = fopen("savegame.txt", "w");
     if(save)
@@ -2363,13 +2367,25 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
             currentB = currentB -> sig;
         }
 
+        for(int i = 0; i < 64; i++)
+        {
+            Dis_tab[i] = tab -> Tablero[i] -> Disponible;
+            x_tab[i] = tab -> Tablero[i] -> x;
+            y_tab[i] = tab -> Tablero[i] -> y;
+            reina[i] = tab -> Tablero[i] -> Reina;
+        }
+
         fwrite(x, sizeof (x), 1,save);
         fwrite(y, sizeof (y), 1,save);
         fwrite(id, sizeof (id), 1,save);
         fwrite(vida, sizeof (vida), 1,save);
         fwrite(col, sizeof (col), 1,save);
         fwrite(trn, sizeof(trn), 1, save);
-        fwrite(tab, sizeof(Tablero), 1, save);
+        fwrite(Dis_tab, sizeof(Dis_tab), 1, save);
+        fwrite(x_tab, sizeof(x_tab), 1, save);
+        fwrite(y_tab, sizeof(y_tab), 1, save);
+        fwrite(reina, sizeof(reina), 1, save);
+
     }
     fclose(save);
     exit(0);
@@ -2388,6 +2404,10 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
         int vida[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int col [24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int trn [1] = {0};
+        int Dis_tab[64];
+        int x_tab[64];
+        int y_tab[64];
+        int reina[64];
 
         fread(x,sizeof(x), 1, save);
         fread(y, sizeof(y), 1, save);
@@ -2395,7 +2415,10 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
         fread(vida,sizeof(vida), 1, save);
         fread(col, sizeof(col), 1, save);
         fread(trn, sizeof(trn), 1, save);
-        fread(tab, sizeof(Tablero), 1, save);
+        fread(Dis_tab, sizeof(Dis_tab), 1, save);
+        fread(x_tab, sizeof(x_tab), 1, save);
+        fread(y_tab, sizeof(y_tab), 1, save);
+        fread(reina, sizeof(reina), 1, save);
         fclose(save);
 
         for(int i = 0; i < 12; i++)
@@ -2424,6 +2447,13 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
         }
         turno = &trn[0];
 
+        for(int i = 0; i  < 64; i++)
+        {
+            tab -> Tablero[i] -> Disponible = Dis_tab[i];
+            tab -> Tablero[i] -> x = x_tab[i];
+            tab -> Tablero[i] -> y = y_tab[i];
+            tab -> Tablero[i] -> Reina = reina[i];
+        }
     } else
     {
         DrawText("No se guardo nada anteriormente", 200, 400, 36, RED);
