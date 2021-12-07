@@ -9,6 +9,9 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 800;
     const int screenHeight = 800;
+    int inicio = 0;
+    int nuevo = 0;
+    int cargar = 0;
     Color BAGE;
     BAGE.r = 207;
     BAGE.g = 185;
@@ -19,89 +22,129 @@ int main(void)
     Llenar_tab(tab);
     Llenar_disponibles(tab, Negras);
     Llenar_disponibles(tab, Blancas);
-
-    InitWindow(screenWidth, screenHeight, "Damas Chinas");
-    SetTargetFPS(20);
     int winner = getWinner(Blancas, Negras, tab);
     int turno = 0;
 
+    InitWindow(screenWidth, screenHeight, "Damas Chinas");
+    SetTargetFPS(20);
 
     Ficha *selected = NULL;
-
-
-
-
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
         BeginDrawing();
-        ClearBackground(BAGE);
-        TableroDisplay(screenWidth,screenHeight);
-        DibujarFichas(Negras, BLACK, tab);
-        DibujarFichas(Blancas, WHITE, tab);
-        if(IsKeyPressed(KEY_A))
+        if(inicio == 0)
         {
-            display_tab(tab);
-        }
-        if(turno == 0)
-        {
-            if(selected)
+            ClearBackground(BAGE);
+            TableroDisplay(screenWidth,screenHeight);
+            menu();
+            if(IsKeyPressed(KEY_N))
             {
-                CirculosR(selected,tab);
-                if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-                {
-                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, tab) != 1)
-                    {
-                        winner = getWinner(Blancas, Negras, tab);
-                        if(winner == 1)
-                        {
-                            DrawText("GANARON LAS NEGRAS", 200, 400, 36 , BLACK);
-                        }
-                        else
-                            turno = 0;
-                    }
-                    else
-                        turno = 1;
-                    selected = NULL;
-                }
+                inicio = 1;
+                nuevo = 1;
             }
-            if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+            if(IsKeyPressed(KEY_R))
             {
-                selected = DetectF(GetMouseX(), GetMouseY(), Negras);
+                inicio = 1;
+                cargar = 1;
             }
         }
-        if(turno == 1)
+
+        if(nuevo == 1)
         {
-            if(selected)
+
+            ClearBackground(BAGE);
+            TableroDisplay(screenWidth,screenHeight);
+            DibujarFichas(Negras, BLACK, tab);
+            DibujarFichas(Blancas, WHITE, tab);
+            if(winner == 2)
             {
-                // aqui ya tenemos una ficha seleccionada, que queremos hacer con ella
-                CirculosR(selected, tab);
-                if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                DrawText("GANARON LAS BLANCAS", 200, 400, 36 , WHITE);
+            }
+            if(winner == 1)
+            {
+                DrawText("GANARON LAS NEGRAS", 200, 400, 36 , BLACK);
+            }
+            if(IsKeyPressed(KEY_S))
+            {
+                DrawText("EL JUEGO SE GUARDO",200,400, 36, GREEN);
+                saveGame(Blancas, Negras, turno, tab);
+            }
+            if(IsKeyPressed(KEY_R))
+            {
+                loadGame(Blancas, Negras, turno, tab);
+            }
+            if(turno == 0 && winner == 0)
+            {
+                if(selected)
                 {
-                    // aqui posiblemente queremos revisar si el siguiente click del usuario es
-                    // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
-                    if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, tab) != 1)
+                    CirculosR(selected,tab);
+                    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
                     {
-                        winner = getWinner(Blancas, Negras, tab);
-                        if(winner == 2)
+                        if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Blancas, tab) != 1)
                         {
-                            DrawText("GANARON LAS BLANCAS", 200, 400, 36 , WHITE);
+                            winner = getWinner(Blancas, Negras, tab);
+                            if(winner == 1)
+                            {
+                                DrawText("GANARON LAS NEGRAS", 200, 400, 36 , BLACK);
+                            }
+                            else
+                                turno = 0;
                         }
                         else
                             turno = 1;
+                        selected = NULL;
                     }
-                    else
-                        turno = 0;
-                    selected = NULL;
+                }
+                if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                {
+                    selected = DetectF(GetMouseX(), GetMouseY(), Negras);
+                }
+            }
+            if(turno == 1 && winner == 0)
+            {
+                if(selected)
+                {
+                    // aqui ya tenemos una ficha seleccionada, que queremos hacer con ella
+                    CirculosR(selected, tab);
+                    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                    {
+                        // aqui posiblemente queremos revisar si el siguiente click del usuario es
+                        // en un movimiento legal? si lo es, realizarlo, si no lo es, "limpiar" la seleccion con selected=null
+                        if(MovimientoValido(GetMouseX(),GetMouseY(),selected, Negras, tab) != 1)
+                        {
+                            winner = getWinner(Blancas, Negras, tab);
+                            if(winner == 2)
+                            {
+                                DrawText("GANARON LAS BLANCAS", 200, 400, 36 , WHITE);
+                            }
+                            else
+                                turno = 1;
+                        }
+                        else
+                            turno = 0;
+                        selected = NULL;
+                    }
+
+                }
+
+                if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+                {
+                    selected = DetectF(GetMouseX(), GetMouseY(), Blancas);
                 }
 
             }
+        }
+        if(cargar == 1)
+        {
 
-            if( selected == NULL && IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-            {
-                selected = DetectF(GetMouseX(), GetMouseY(), Blancas);
-            }
+            loadGame(Blancas, Negras, &turno, tab);
+            ClearBackground(BAGE);
+            TableroDisplay(screenWidth,screenHeight);
+            DibujarFichas(Negras, BLACK, tab);
+            DibujarFichas(Blancas, WHITE, tab);
 
         }
+
 
         EndDrawing();
     }

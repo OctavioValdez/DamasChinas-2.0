@@ -46,6 +46,13 @@ int get_pos_arr(Ficha* player, Tablero* tab)
     }
 }
 
+void menu()
+{
+    DrawText("BIENVENIDO", 250, 300, 45, BLACK);
+    DrawText("Nuevo juego picale a N", 50, 450, 28, BLACK);
+    DrawText("Reanudar juego a R", 500, 450, 28, BLACK);
+}
+
 void isReina(Ficha* player, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
@@ -260,7 +267,6 @@ Ficha *Crear_fichas(int C) {
 
 void DibujarFichas(Ficha * fichas, color C, Tablero* tab)
 {
-
     Ficha* Current = fichas -> sig;
     while(Current != NULL)
     {
@@ -278,6 +284,7 @@ void DibujarFichas(Ficha * fichas, color C, Tablero* tab)
         Current = Current -> sig;
     }
 }
+
 
 void Display(Ficha * fichas)
 {
@@ -438,6 +445,7 @@ void eliminarf(Ficha* ficha, Tablero* tab)
     ficha -> vida = 0;
 }
 
+
 int comerFNegraDerecha(Ficha* player, Ficha* oponente, Tablero* tab)
 {
     Ficha* ficha = oponente -> sig;
@@ -580,10 +588,12 @@ int colision(Ficha *player, Tablero* tab)
         int pos_der = pos_arr + 9;
         int band_der = 0;
         int band_izq = 0;
+        if(player -> y == 750)
+            return 0;
         if(player -> x == 50)
         {
-            if(tab -> Tablero[pos_der] -> Disponible == 2 || (tab -> Tablero[pos_der] -> Disponible == 1 &&
-                                                              tab -> Tablero[pos_der] -> Reina == 1))
+            if((tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 0) ||
+            (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             }
@@ -592,22 +602,23 @@ int colision(Ficha *player, Tablero* tab)
         }
         if(player -> x == 750)
         {
-            if(tab -> Tablero[pos_izq] -> Disponible == 2 || (tab -> Tablero[pos_izq] -> Disponible == 1 &&
-                                                              tab -> Tablero[pos_izq] -> Reina == 1))
+            if((tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 0)||
+            (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
+
             {
                 return 2;
             } else
                 return 0;
         }
-        if(player -> y == 750)
-            return 0;
-        if(tab -> Tablero[pos_izq] -> Disponible == 2 || (tab -> Tablero[pos_izq] -> Disponible == 1 &&
-                                                          tab -> Tablero[pos_izq] -> Reina == 1))
+
+        if((tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 0 )||
+        (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
+
         {
             band_izq = 1;
         }
-        if(tab -> Tablero[pos_der] -> Disponible == 2 || (tab -> Tablero[pos_der] -> Disponible == 1 &&
-                                                          tab -> Tablero[pos_der] -> Reina == 1))
+        if((tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 0) ||
+        (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             band_der = 1;
         }
@@ -671,10 +682,15 @@ int colision(Ficha *player, Tablero* tab)
         int pos_der = pos_arr - 7;
         int band_der = 0;
         int band_izq = 0;
+
+        if(player -> y == 50)
+            return 0;
+
         if(player -> x == 50)
         {
-            if(tab -> Tablero[pos_der] -> Disponible == 1 || (tab -> Tablero[pos_der] -> Disponible == 2 &&
-                                                                    tab -> Tablero[pos_der] -> Reina == 1))
+            if((tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 0)||
+            (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
+
 
             {
                 return 1;
@@ -683,23 +699,22 @@ int colision(Ficha *player, Tablero* tab)
         }
         if(player -> x == 750)
         {
-            if(tab -> Tablero[pos_izq] -> Disponible == 1 || (tab -> Tablero[pos_izq] -> Disponible == 2
-                                                              &&
-                                                              tab -> Tablero[pos_izq] -> Reina == 1))
+            if((tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 0) ||
+            (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
-        if(tab -> Tablero[pos_izq] -> Disponible == 1 || (tab -> Tablero[pos_izq] -> Disponible == 2
-                                                          &&
-                                                          tab -> Tablero[pos_izq] -> Reina == 1))
+        if((tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 0) ||
+        (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             band_izq = 1;
         }
-        if(tab -> Tablero[pos_der] -> Disponible == 1 || (tab -> Tablero[pos_der] -> Disponible == 2
-                                                          &&
-                                                          tab -> Tablero[pos_der] -> Reina == 1))
+        if((tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 0)||
+        (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
+
+
         {
             band_der = 1;
         }
@@ -779,8 +794,9 @@ int comidaDisponible(Ficha* player, Tablero* tab)
 
         if(player -> x == 50 || player -> x == 150)
         {
-            if(tab -> Tablero[pos_der] -> Disponible == 2 || (tab -> Tablero[pos_der] -> Disponible == 1 &&
-                                                              tab -> Tablero[pos_der] -> Reina == 1))
+            if((tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 0)||
+            (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
+
             {
                 return 1;
             } else
@@ -788,8 +804,9 @@ int comidaDisponible(Ficha* player, Tablero* tab)
         }
         if(player -> x == 650 || player -> x == 750)
         {
-            if(tab -> Tablero[pos_izq] -> Disponible == 2 || (tab -> Tablero[pos_izq] -> Disponible == 1 &&
-                                                              tab -> Tablero[pos_izq] -> Reina == 1))
+            if((tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 0) ||
+            (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
+
             {
                 return 2;
             } else
@@ -797,14 +814,16 @@ int comidaDisponible(Ficha* player, Tablero* tab)
         }
 
 
-        if(tab -> Tablero[pos_der] -> Disponible == 2 || (tab -> Tablero[pos_der] -> Disponible == 1 &&
-                                                          tab -> Tablero[pos_der] -> Reina == 1))
+        if((tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 0) ||
+        (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
+
         {
             ban_der = 1;
         }
 
-        if(tab -> Tablero[pos_izq] -> Disponible == 2 || (tab -> Tablero[pos_izq] -> Disponible == 1 &&
-                                                          tab -> Tablero[pos_izq] -> Reina == 1))
+        if((tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 0)||
+        (tab -> Tablero[pos_izq] -> Disponible == 1 &&  tab -> Tablero[pos_izq] -> Reina == 1))
+
         {
             ban_izq = 1;
         }
@@ -877,9 +896,8 @@ int comidaDisponible(Ficha* player, Tablero* tab)
             return 0;
         if(player -> x == 50 || player -> x == 150)
         {
-            if(tab -> Tablero[pos_der] -> Disponible == 1 || (tab -> Tablero[pos_der] -> Disponible == 2
-                                                              &&
-                                                              tab -> Tablero[pos_der] -> Reina == 1))
+            if((tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 0)||
+            (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             } else
@@ -887,25 +905,22 @@ int comidaDisponible(Ficha* player, Tablero* tab)
         }
         if(player -> x == 650 || player -> x == 750)
         {
-            if(tab -> Tablero[pos_izq] -> Disponible == 1 || (tab -> Tablero[pos_izq] -> Disponible == 2
-                                                              &&
-                                                              tab -> Tablero[pos_izq] -> Reina == 1))
+            if((tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 0)||
+            (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
 
-        if(tab -> Tablero[pos_der] -> Disponible == 1 || (tab -> Tablero[pos_der] -> Disponible == 2
-                                                          &&
-                                                          tab -> Tablero[pos_der] -> Reina == 1))
+        if((tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 0) ||
+        (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             ban_der = 1;
         }
 
-        if(tab -> Tablero[pos_izq] -> Disponible == 1 || (tab -> Tablero[pos_izq] -> Disponible == 2
-                                                          &&
-                                                          tab -> Tablero[pos_izq] -> Reina == 1))
+        if((tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 0) ||
+        (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             ban_izq = 1;
         }
@@ -984,7 +999,8 @@ int isAmiga(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            if(tab -> Tablero[pos_der] -> Disponible == 1 ||
+                    (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             }
@@ -995,19 +1011,22 @@ int isAmiga(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            if(tab -> Tablero[pos_izq] -> Disponible == 1 ||
+                    (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
-        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        if(tab -> Tablero[pos_izq] -> Disponible == 1 ||
+                (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             band_izq = 1;
         }
         if(tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1)
             band_izq = 0;
-        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        if(tab -> Tablero[pos_der] -> Disponible == 1 ||
+                (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             band_der = 1;
         }
@@ -1082,7 +1101,8 @@ int isAmiga(Ficha* player, Tablero* tab)
             if(tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1)
                 return 0;
 
-            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            if(tab -> Tablero[pos_der] -> Disponible == 2 ||
+                    (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             } else
@@ -1092,20 +1112,23 @@ int isAmiga(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            if(tab -> Tablero[pos_izq] -> Disponible == 2 ||
+                    (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
 
-        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        if(tab -> Tablero[pos_izq] -> Disponible == 2 ||
+                (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             band_izq = 1;
         }
         if(tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1)
             band_izq = 0;
-        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        if(tab -> Tablero[pos_der] -> Disponible == 2 ||
+                (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             band_der = 1;
         }
@@ -1190,7 +1213,8 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_der] -> Disponible == 1)
+            if(tab -> Tablero[pos_der] -> Disponible == 1 ||
+                    (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             } else
@@ -1200,23 +1224,24 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_izq] -> Disponible == 1)
+            if(tab -> Tablero[pos_izq] -> Disponible == 1 ||
+                    (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
-        if(player -> y == 650 || player -> y == 750)
-            return 0;
 
-        if(tab -> Tablero[pos_der] -> Disponible == 1)
+        if(tab -> Tablero[pos_der] -> Disponible == 1 ||
+                (tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             ban_der = 1;
         }
         if(tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1)
             ban_der = 0;
 
-        if(tab -> Tablero[pos_izq] -> Disponible == 1)
+        if(tab -> Tablero[pos_izq] -> Disponible == 1 ||
+                (tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             ban_izq = 1;
         }
@@ -1298,7 +1323,8 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_der] -> Disponible == 2)
+            if(tab -> Tablero[pos_der] -> Disponible == 2 ||
+                    (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
             {
                 return 1;
             } else
@@ -1308,23 +1334,24 @@ int isAmigalejana(Ficha* player, Tablero* tab)
         {
             if(tab -> Tablero[pos_izq] -> Disponible == 2 && tab -> Tablero[pos_izq] -> Reina == 1)
                 return 0;
-            if(tab -> Tablero[pos_izq] -> Disponible == 2)
+            if(tab -> Tablero[pos_izq] -> Disponible == 2 ||
+                    (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
             {
                 return 2;
             } else
                 return 0;
         }
 
-
-
-        if(tab -> Tablero[pos_der] -> Disponible == 2)
+        if(tab -> Tablero[pos_der] -> Disponible == 2 ||
+                (tab -> Tablero[pos_der] -> Disponible == 1 && tab -> Tablero[pos_der] -> Reina == 1))
         {
             ban_der = 1;
         }
         if(tab -> Tablero[pos_der] -> Disponible == 2 && tab -> Tablero[pos_der] -> Reina == 1)
             ban_der = 0;
 
-        if(tab -> Tablero[pos_izq] -> Disponible == 2)
+        if(tab -> Tablero[pos_izq] -> Disponible == 2 ||
+                (tab -> Tablero[pos_izq] -> Disponible == 1 && tab -> Tablero[pos_izq] -> Reina == 1))
         {
             ban_izq = 1;
         }
@@ -1420,6 +1447,7 @@ int SinEnemigos(int x, int y, Ficha* player, Tablero* tab)
 
 int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 {
+
     int Comida = comidaDisponible(player, tab);
     int AmigaL = isAmigalejana(player, tab);
     int AmigaC = isAmiga(player, tab);
@@ -1433,7 +1461,7 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 if(x > player -> x - 145 && x < player -> x - 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
                     MovNegrasSinComida(player, 0, tab);
-                    return 2;
+                    return 1;
                 }
         }
 
@@ -1441,10 +1469,11 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(AmigaC == 2)
             {
+
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1,tab);
-                    comerFBlancaDerecha(player, oponentes,tab);
+                    comerFBlancaDerecha(player, oponentes, tab);
                     return 1;
                 }
             }
@@ -1455,18 +1484,17 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                     if(player -> x == 650 || (player -> y == 650))
                     {
                         MovNegrasSinComida(player, 0, tab);
-                        return 2;
+                        return 1;
                     } else
                     {
                         eliminarf(player, tab);
-                        return 2;
+                        return 1;
                     }
                 }
-
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1,tab);
-                    comerFBlancaDerecha(player, oponentes,tab);
+                    comerFBlancaDerecha(player, oponentes, tab);
                     return 1;
                 }
             }
@@ -1485,7 +1513,7 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 if(x > player -> x - 145 && x < player -> x - 55 && y > player -> y - 145 && y < player -> y - 55)
                 {
                     MovBlancasSinComida(player,0, tab);
-                    return 2;
+                    return 1;
                 }
             }
         }
@@ -1515,19 +1543,17 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                     if(player -> x == 650 || player -> y == 150)
                     {
                         MovBlancasSinComida(player,0, tab);
-                        return 2;
+                        return 1;
                     }else
                     {
                         eliminarf(player, tab);
-                        return 2;
+                        return 1;
                     }
                 }
             }
 
         }
     }
-
-
 }
 
 int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
@@ -1547,7 +1573,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                 if(x < player -> x + 145 && x > player -> x + 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
                     MovNegrasSinComida(player, 1, tab);
-                    return 2;
+                    return 1;
                 }
             }
         }
@@ -1556,10 +1582,11 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
         {
             if(AmigaC == 1)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player,0,tab);
-                    comerFBlancaIzquierda(player,oponentes, tab);
+                    comerFBlancaIzquierda(player, oponentes, tab);
                     return 2;
                 }
             }
@@ -1568,7 +1595,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player,0,tab);
-                    comerFBlancaIzquierda(player,oponentes, tab);
+                    comerFBlancaIzquierda(player, oponentes, tab);
                     return 1;
                 }
                 if(x < player -> x + 145 && x > player -> x + 55 && y < player -> y + 145 && y > player -> y + 55)
@@ -1576,11 +1603,11 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                     if(player -> x == 150 || player -> y == 650)
                     {
                         MovNegrasSinComida(player, 1, tab);
-                        return 2;
+                        return 1;
                     } else
                     {
                         eliminarf(player, tab);
-                        return 2;
+                        return 1;
                     }
                 }
 
@@ -1598,7 +1625,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                 if(x < player -> x + 145 && x > player -> x + 55 && y > player -> y -145 && y < player -> y - 55)
                 {
                     MovBlancasSinComida(player, 1, tab);
-                    return 2;
+                    return 1;
                 }
             }
         }
@@ -1607,6 +1634,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
         {
             if(AmigaC == 1)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1617,6 +1645,7 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
 
             if(AmigaC == 0)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1629,11 +1658,11 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                     if(player -> x == 150 || player -> y == 150)
                     {
                         MovBlancasSinComida(player, 1, tab);
-                        return 2;
+                        return 1;
                     }else
                     {
                         eliminarf(player, tab);
-                        return 2;
+                        return 1;
                     }
                 }
             }
@@ -1653,6 +1682,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 
         if(Comida == 0 && AmigaL == 0)
         {
+
             if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
             {
                 MovNegrasConComida(player, 1, tab);
@@ -1672,6 +1702,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(AmigaL == 0)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 0, tab);
@@ -1684,6 +1715,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(Comida == 0)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 0, tab);
@@ -1696,6 +1728,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(AmigaL == 0)
             {
+
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
@@ -1708,6 +1741,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(Comida == 0)
             {
+
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
@@ -1725,12 +1759,14 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 
         if(Comida == 0 || AmigaL == 0)
         {
+
             if(x < player -> x + 245 && x > player -> x + 155 && y > player -> y - 245 && y < player -> y - 155)
             {
                 MovBlancasConComida(player, 1, tab);
                 comerFNegraDerecha(player, oponentes, tab);
                 return 1;
             }
+
             if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
             {
                 MovBlancasConComida(player, 0, tab);
@@ -1743,6 +1779,7 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         {
             if(AmigaL == 0)
             {
+
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1790,35 +1827,43 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
     }
 }
 
-int sinMovimiento(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
+int sinMovimiento(Ficha* player, Tablero* tab, int fichas_c)
 {
     int colis = colision(player, tab);
     int Comida = comidaDisponible(player, tab);
     int AmigaC = isAmiga(player, tab);
     int AmigaL = isAmigalejana(player,tab);
-    if(AmigaC == 3)
-        return 1;
-    if(colis == 3 &&(AmigaL == 3 || Comida == 3))
-        return 1;
-    if(colis == 3 &&(AmigaL == 1 && Comida == 2))
-        return 1;
-    if(colis == 3 &&(AmigaL == 2 && Comida == 1))
-        return 1;
-    if(AmigaC == 1 && (colis == 2 && (Comida == 2 || Comida == 3)))
-        return 1;
-    if(AmigaC == 2 && (colis == 1 && (Comida == 1 || Comida == 3)))
-        return 1;
+    if(fichas_c > 0)
+    {
+        if(AmigaC == 0 &&(colis == 2 && (Comida == 2 || AmigaL == 2)))
+            return 1;
+        if(AmigaC == 0 &&(colis == 1 && (Comida == 1 || AmigaL == 1)))
+            return 1;
+        if(AmigaC == 0 && colis == 0)
+            return 1;
+        if(AmigaC == 3)
+            return 1;
+        if(colis == 3 &&(AmigaL == 3 || Comida == 3))
+            return 1;
+        if(colis == 3 &&(AmigaL == 1 && Comida == 2))
+            return 1;
+        if(colis == 3 &&(AmigaL == 2 && Comida == 1))
+            return 1;
+        if(AmigaC == 1 && (colis == 2 && ((Comida == 2 || Comida == 3) || (AmigaL == 2 || AmigaL == 3))))
+            return 1;
+        if(AmigaC == 2 && (colis == 1 && ((Comida == 1 || Comida == 3) || (AmigaL == 1 || AmigaL == 3))))
+            return 1;
+    }
+
+    return 0;
 }
 
 int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
     int Mov = 0;
-    int Run = 0;
-    if(Run == 0)
-    {
-
-    }
+    int fichas_eliminadas = 0;
+    int Run = sinMovimiento(player,tab, fichas_eliminadas);
     if(player -> dir == 0)
     {
         if(colision(player, tab) == 0)
@@ -1831,9 +1876,8 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         }
         if(colision(player, tab) == 1)
         {
-            Mov = EnemigoDerecha(x, y,player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1 || Mov == 2)
+            Mov = EnemigoDerecha(x, y, player, tab, oponentes);
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -1841,8 +1885,7 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         if(colision(player, tab) == 2)
         {
             Mov = EnemigoIzquierda(x, y, player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1 || Mov == 2)
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -1850,8 +1893,7 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         if(colision(player, tab) == 3)
         {
             Mov = EnemigoSupremo(x, y, player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1)
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -1862,17 +1904,15 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         if(colision(player, tab) == 0)
         {
             Mov = SinEnemigos(x, y, player, tab);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1)
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
         }
         if(colision(player, tab) == 1)
         {
-            Mov = EnemigoDerecha(x, y,player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1 || Mov == 2)
+            Mov = EnemigoDerecha(x, y, player, tab, oponentes);
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -1880,8 +1920,7 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         if(colision(player, tab) == 2)
         {
             Mov = EnemigoIzquierda(x, y, player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1 || Mov == 2)
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -1889,8 +1928,7 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
         if(colision(player, tab) == 3)
         {
             Mov = EnemigoSupremo(x, y, player, tab, oponentes);
-            Run = sinMovimiento(x, y, player, tab, oponentes);
-            if(Run == 1)
+            if(Mov == 1)
                 return 1;
             else
                 return 0;
@@ -2237,6 +2275,15 @@ int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
     int contB = 0;
     int contN = 0;
 
+//    if(movimientosDisponibles(Blancas, Negras, tab) == 2)
+//    {
+//        return 2;
+//    }
+//    if(movimientosDisponibles(Blancas, Negras, tab) == 1)
+//    {
+//        return 1;
+//    }
+
     while (CurrentN != NULL)
     {
         if(CurrentN -> vida == 0)
@@ -2260,3 +2307,125 @@ int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 
 // Archivos
 
+void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
+{
+    Ficha* currentB = Blancas -> sig ? Blancas -> sig: Blancas;
+    Ficha* currentN = Negras -> sig ? Negras -> sig: Negras;
+
+    int x[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int y[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int id[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int vida[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int col [24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int trn [1] = {0};
+
+    FILE* save = fopen("savegame.txt", "w");
+    if(save)
+    {
+        for(int i = 0; i < 12; i++)
+        {
+            if(currentN != NULL)
+            {
+                x[i] = currentN -> x;
+                y[i] = currentN -> y;
+                id[i] = currentN -> id;
+                vida[i] = currentN -> vida;
+                col[i] = 1;
+            }
+            if(currentN == NULL)
+            {
+                x[i] = 0;
+                y[i] = 0;
+                id[i] = 0;
+                vida[i] = 0;
+                col[i] = 0;
+            }
+            currentN = currentN -> sig;
+        }
+        for(int i = 12 ; i < 24; i++)
+        {
+            if(currentB != NULL)
+            {
+                x[i] = currentB -> x;
+                y[i] = currentB -> y;
+                id[i] = currentB -> id;
+                vida[i] = currentB -> vida;
+                col[i] = 2;
+            }
+            if(currentB == NULL)
+            {
+                x[i] = 0;
+                y[i] = 0;
+                id[i] = 0;
+                vida[i] = 0;
+                col[i] = 0;
+            }
+            currentB = currentB -> sig;
+        }
+
+        fwrite(x, sizeof (x), 1,save);
+        fwrite(y, sizeof (y), 1,save);
+        fwrite(id, sizeof (id), 1,save);
+        fwrite(vida, sizeof (vida), 1,save);
+        fwrite(col, sizeof (col), 1,save);
+        fwrite(trn, sizeof(trn), 1, save);
+        fwrite(tab, sizeof(Tablero), 1, save);
+    }
+    fclose(save);
+    exit(0);
+}
+void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
+{
+    Ficha* currentN = Negras -> sig;
+    Ficha* CurrentB = Blancas -> sig;
+    FILE* save = fopen("savegame.txt", "r");
+
+    if(save != NULL)
+    {
+        int x[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int y[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int id[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int vida[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int col [24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        int trn [1] = {0};
+
+        fread(x,sizeof(x), 1, save);
+        fread(y, sizeof(y), 1, save);
+        fread(id, sizeof (id), 1,save);
+        fread(vida,sizeof(vida), 1, save);
+        fread(col, sizeof(col), 1, save);
+        fread(trn, sizeof(trn), 1, save);
+        fread(tab, sizeof(Tablero), 1, save);
+        fclose(save);
+
+        for(int i = 0; i < 12; i++)
+        {
+            if(currentN != NULL)
+            {
+                currentN -> x = x[i];
+                currentN -> y = y[i];
+                currentN -> id = id[i];
+                currentN -> vida = vida[i];
+                currentN -> col = 'N';
+            }
+            currentN = currentN -> sig;
+        }
+        for(int i = 12; i < 24; i++)
+        {
+            if(CurrentB != NULL)
+            {
+                CurrentB -> x = x[i];
+                CurrentB -> y = y[i];
+                CurrentB -> id = id[i];
+                CurrentB -> vida = vida[i];
+                CurrentB -> col = 'N';
+            }
+            CurrentB = CurrentB -> sig;
+        }
+        turno = &trn[0];
+
+    } else
+    {
+        DrawText("No se guardo nada anteriormente", 200, 400, 36, RED);
+    }
+}
