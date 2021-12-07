@@ -8,6 +8,8 @@ Las mismas que un juego de damas chinas clasico, pero diferenciando en:
 
 -La reina solamente tiene el poder de, al llegar al otro extremo del tablero, poder moverse de reversa para comerse las fichas enemigas ahora por atras.
 
+-Una partida termina cuando se acaban las fichas del oponente.
+
 EXPLICACION DE LAS FUNCIONES:
 
 
