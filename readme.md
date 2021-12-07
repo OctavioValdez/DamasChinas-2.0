@@ -10,6 +10,12 @@ Las mismas que un juego de damas chinas clasico, pero diferenciando en:
 
 -Una partida termina cuando se acaban las fichas del oponente.
 
+-Si quieres guardar tu partida se le presiona a la tecla S (Se cerrara pero si se vuelve a correr podras cargar el juego guardado).
+
+-En el menú del principio se tiene que presionar la tecla N.
+
+-Si quieres cargar un juego guardado presiona la tecla R.
+
 EXPLICACION DE LAS FUNCIONES:
 
 
@@ -75,13 +81,9 @@ EXPLICACION DE LAS FUNCIONES:
 
 --EnemigoSupremo realiza lo mismo que las dos funciones anteriores, pero sabiendo que se tiene enemigos a los dos lados de nuestra ficha.
 
---sinMovimiento recibe la posicion en x y y del mouse del usuario, la ficha seleccionada, el tablero y las fichas oponentes para, tomando en cuenta las funciones ya mencionadas, darnos cuenta de si una ficha ya no tiene mas comida disponible luego de haberse comido una ficha.
-
 --MovimientoValido es la funcion en la que usamos las anteriores mencionadas, recibe las posiciones en x y y del mouse del usuario, la ficha seleccionada, las fichas oponentes y el tablero. Realizando comparaciones con lo que retornen nuestras funciones como colision, isAmiga, EnemigoDerecha, etc, podemos hacer el movimiento valido de fichas, y si se realizo un movimiento valido se retorna 1, numero que se utiliza para hacer posible el cambio de turno. Si no hubo movimientos validos se retorna 0.
 
 --CirculosR toma como parametros la ficha seleccionada por el usuario, y le tablero, y haciendo uso de las funciones anteriores, podermos dibujar circulos rojos donde el usuario tenga opcion de mover su ficha.
-
---movimientosDisponibles recibe las fichas blancas y negras, y el tablero, haciendo uso de las fichas mencionadas anteriormente nos damos cuenta si una ficha ya no tiene un movimiento disponible, recorriendo todas las fichas guardamos el numero de fichas bloqueadas en un contador, y al final lo comparamos con otro contador que contiene el numero de fichas con vida. Si el total de fichas negras con vida estan bloqueadas, retornamos 2 (ganaron las blancas), si todas las blancas estan bloqueadas retornamos 1 (ganaron las negras), y si ninguna ha perdido retornamos 0.
 
 --getWinner recibe tambien las fichas blancas, las fichas negras y el tablero, cuenta cuantas fichas aun tienen vida, y si todas las fichas negras estan muertas retornamos 2, si las fichas blancas estan muertas retornamos 1, y si no esta muerto el total de ninguna de las dos retornamos 0.
 
