@@ -1699,40 +1699,50 @@ int EnemigoDerecha(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
     }
 }
 
+
+//detectamos si tenemos un enemigo a la izquierda
 int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 {
+    //asignacion del resultado de estas funciones a estos enteros para hacer codigo mas simple
     int Comida = comidaDisponible(player, tab);
     int AmigaL = isAmigalejana(player, tab);
     int AmigaC = isAmiga(player, tab);
 
-    if(player -> dir == 0)
+    if(player -> dir == 0)//ficha que va hacia abajo
     {
+        //si tenemos amigas o enemigas estorbando para comer
         if((Comida == 2 || Comida == 3) || (AmigaL == 2 || AmigaL == 3))
         {
+            //si tenemos el paso totalmente bloqueado
             if(AmigaC == 1)
                 return 0;
+            //si nos podemos mover a la derecha
             if(AmigaC == 0)
             {
+                //si se selecciona una casilla correcta y disponible a la derecha
                 if(x < player -> x + 145 && x > player -> x + 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
-                    MovNegrasSinComida(player, 1, tab);
+                    MovNegrasSinComida(player, 1, tab);//nos movemos a la derecha sin comer nada
                     return 1;
                 }
             }
         }
-
+        //si no nos estorba ninguna amiga lejana o alguna enemiga
         if((Comida == 1 || Comida == 0) && (AmigaL == 1 || AmigaL == 0))
         {
+            //si a la derecha nos estorba una amiga
             if(AmigaC == 1)
             {
-
+                //si seleccionamos una casilla valida para comer a la izquierda
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
+                    //nos movemos a la izquierda y eliminamos la ficha oponente
                     MovNegrasConComida(player,0,tab);
                     comerFBlancaIzquierda(player, oponentes, tab);
                     return 2;
                 }
             }
+            //si no tetemos amigas estorbando a la derecha
             if(AmigaC == 0)
             {
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
@@ -1743,12 +1753,13 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
                 }
                 if(x < player -> x + 145 && x > player -> x + 55 && y < player -> y + 145 && y > player -> y + 55)
                 {
-                    if(player -> x == 150 || player -> y == 650)
+                    if(player -> x == 150 || player -> y == 650)//solo si nos encontramos en lugares donde se podria tomar basura si verificamos posiciones lejanas
                     {
                         MovNegrasSinComida(player, 1, tab);
                         return 1;
                     } else
                     {
+                        //se elimina la ficha del jugador en turno si tuvo oportunidad de comer y no lo hizo
                         eliminarf(player, tab);
                         return 1;
                     }
@@ -1757,38 +1768,42 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
             }
         }
     }
-    if(player -> dir == 1)
+    if(player -> dir == 1)//si nuestra ficha va hacia arriba
     {
+        //si nos estorba alguna amiga lejana o una enemiga para comer a la izquierda
         if((Comida == 2 || Comida == 3) || (AmigaL == 2 || AmigaL == 3))
         {
+            //si tenemos el paso totalmente bloqueado
             if(AmigaC == 1)
                 return 0;
+            //si tenemos oportunidad de movernos a la derecha y seleccionamos la casilla correcta
             if(AmigaC == 0)
             {
                 if(x < player -> x + 145 && x > player -> x + 55 && y > player -> y -145 && y < player -> y - 55)
                 {
-                    MovBlancasSinComida(player, 1, tab);
+                    MovBlancasSinComida(player, 1, tab);//nos movemos a la derecha sin comer
                     return 1;
                 }
             }
         }
-
+        //si ninguna amiga lejana o enemiga nos estorba para comer a la izquierda
         if((Comida == 1 || Comida == 0) && (AmigaL == 1 || AmigaL == 0))
         {
+            //si una amiga nos tapa el paso a la derecha
             if(AmigaC == 1)
             {
-
+                //si se selecciona la casilla correcta a la izquierda para comer
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
+                    //nos movemos y nos comemos la ficha oponente
                     MovBlancasConComida(player, 0, tab);
                     comerFNegraIzquierda(player, oponentes, tab);
                     return 1;
                 }
             }
-
+            //si no tenemos una amiga a la derecha tapando nuestro paso
             if(AmigaC == 0)
             {
-
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1798,12 +1813,13 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
 
                 if(x < player -> x + 145 && x > player -> x + 55 && y > player -> y -145 && y < player -> y - 55)
                 {
-                    if(player -> x == 150 || player -> y == 150)
+                    if(player -> x == 150 || player -> y == 150)//solo si nos encontramos en posiciones que pueden tomar basura
                     {
-                        MovBlancasSinComida(player, 1, tab);
+                        MovBlancasSinComida(player, 1, tab);//nos movemos sin comer
                         return 1;
                     }else
                     {
+                        //si hubo oportunidad de comer y no se hizo, se pierde la ficha del jugador en turno por bobo.
                         eliminarf(player, tab);
                         return 1;
                     }
@@ -1813,26 +1829,30 @@ int EnemigoIzquierda (int x, int y, Ficha* player, Tablero* tab, Ficha* oponente
     }
 }
 
+//detecta si se puede comer a la izquierda y derecha
 int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
 {
     int Comida = comidaDisponible(player, tab);
     int AmigaL = isAmigalejana(player, tab);
 
-    if(player -> dir == 0)
+    if(player -> dir == 0)//si la ficha va hacia abajo
     {
+        //si tenemos el paso bloqueado para comer de cualquier direccion
         if((Comida == 3 || AmigaL == 3) || (Comida == 1 && AmigaL == 2) || (Comida == 2 && AmigaL == 1))
             return 0;
 
+        //si podemos comer de los dos lados
         if(Comida == 0 && AmigaL == 0)
         {
-
+            //si seleccionamos una casilla valida a la derecha para comer
             if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
             {
+                //movemos nuestra ficha y nos comemos la oponente
                 MovNegrasConComida(player, 1, tab);
                 comerFBlancaDerecha(player, oponentes, tab);
                 return 1;
             }
-
+            //movimiento para comer a la izquierda
             if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
             {
                 MovNegrasConComida(player, 0, tab);
@@ -1840,12 +1860,13 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 return 1;
             }
         }
-
+        //si tenemos bloqueado el lado derecho para comer por una ficha oponente
         if(Comida == 1)
         {
+            //si ninguna amiga nos estorba a la izquierda
             if(AmigaL == 0)
             {
-
+                //movimiento para comer a la izquierda
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 0, tab);
@@ -1854,11 +1875,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si del lado derecho no se puede comer debido a una amiga
         if(AmigaL == 1)
         {
             if(Comida == 0)
             {
-
+                //movimiento valida para comer a la izquierda
                 if(x > player -> x - 245 && x < player -> x - 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 0, tab);
@@ -1867,11 +1889,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si a la izquierda nos estorba una ficha oponente para comer
         if(Comida == 2)
         {
             if(AmigaL == 0)
             {
-
+                //movimiento valido para comer a la derecha
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
@@ -1880,11 +1903,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si a la izquierda nos estorba una amiga lejana para comer
         if(AmigaL == 2)
         {
             if(Comida == 0)
             {
-
+                //movimiento valido para comer a la derecha
                 if(x < player -> x + 245 && x > player -> x + 155 && y < player -> y + 245 && y > player -> y + 155)
                 {
                     MovNegrasConComida(player, 1, tab);
@@ -1895,21 +1919,23 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
         }
 
     }
+    //si nuestra ficha va hacia arriba
     if(player -> dir ==1)
     {
+        //al tener bloqueado todo para comer
         if((Comida == 3 || AmigaL == 3) || (Comida == 1 && AmigaL == 2) || (Comida == 2 && AmigaL == 1))
             return 0;
-
+        //al poder comer todo
         if(Comida == 0 || AmigaL == 0)
         {
-
+            //movimiento valido para comer a la derecha si se selecciona la casilla
             if(x < player -> x + 245 && x > player -> x + 155 && y > player -> y - 245 && y < player -> y - 155)
             {
                 MovBlancasConComida(player, 1, tab);
                 comerFNegraDerecha(player, oponentes, tab);
                 return 1;
             }
-
+            //movimiento valido para comer a la izquierda si se selecciona la casilla
             if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
             {
                 MovBlancasConComida(player, 0, tab);
@@ -1917,12 +1943,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 return 1;
             }
         }
-
+        //si a la derecha nos estorba un oponente para comer
         if(Comida == 1)
         {
             if(AmigaL == 0)
             {
-
+                //movimiento valido para comer a la izquierda
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1931,10 +1957,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si nos estorba una amiga lejana para comer a la derecha
         if(AmigaL == 1)
         {
             if(Comida == 0)
             {
+                //movimiento valido para comer a la izquierda
                 if(x > player -> x - 245 && x < player -> x - 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 0, tab);
@@ -1943,10 +1971,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si a la izquierda nos estorba una oponente para comer
         if(Comida == 2)
         {
             if(AmigaL == 0)
             {
+                //movimiento valido para comer al a derecha
                 if(x < player -> x + 245 && x > player -> x + 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 1, tab);
@@ -1955,10 +1985,12 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
                 }
             }
         }
+        //si al al izquierda nos estorba una amiga lejana para comer
         if(AmigaL == 2)
         {
             if(Comida == 0)
             {
+                //movimiento valido para comer a la derecha
                 if(x < player -> x + 245 && x > player -> x + 155 && y > player -> y - 245 && y < player -> y - 155)
                 {
                     MovBlancasConComida(player, 1, tab);
@@ -1970,80 +2002,64 @@ int EnemigoSupremo(int x, int y, Ficha* player, Tablero* tab, Ficha* oponentes)
     }
 }
 
-int sinMovimiento(Ficha* player, Tablero* tab, int fichas_c)
-{
-    int colis = colision(player, tab);
-    int Comida = comidaDisponible(player, tab);
-    int AmigaC = isAmiga(player, tab);
-    int AmigaL = isAmigalejana(player,tab);
-    if(fichas_c > 0)
-    {
-        if(AmigaC == 0 &&(colis == 2 && (Comida == 2 || AmigaL == 2)))
-            return 1;
-        if(AmigaC == 0 &&(colis == 1 && (Comida == 1 || AmigaL == 1)))
-            return 1;
-        if(AmigaC == 0 && colis == 0)
-            return 1;
-        if(AmigaC == 3)
-            return 1;
-        if(colis == 3 &&(AmigaL == 3 || Comida == 3))
-            return 1;
-        if(colis == 3 &&(AmigaL == 1 && Comida == 2))
-            return 1;
-        if(colis == 3 &&(AmigaL == 2 && Comida == 1))
-            return 1;
-        if(AmigaC == 1 && (colis == 2 && ((Comida == 2 || Comida == 3) || (AmigaL == 2 || AmigaL == 3))))
-            return 1;
-        if(AmigaC == 2 && (colis == 1 && ((Comida == 1 || Comida == 3) || (AmigaL == 1 || AmigaL == 3))))
-            return 1;
-    }
-
-    return 0;
-}
-
+//Se evalua si el movimiento realizado sea valido
 int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab)
 {
     int pos_arr = get_pos_arr(player, tab);
     int Mov = 0;
     int fichas_eliminadas = 0;
-    int Run = sinMovimiento(player,tab, fichas_eliminadas);
+//    Si la ficha se mueve hacia abajo
     if(player -> dir == 0)
     {
+//        Si np hay enemigos a los lados
         if(colision(player, tab) == 0)
         {
+//            Se mueve bajo las restricciones de la funcion
             Mov = SinEnemigos(x, y, player, tab);
+            //Si se hizo correctamente el movimiento se retorna 1
             if(Mov == 1)
                 return 1;
             else
                 return 0;
         }
+//        Hay un oponente a la derecha
         if(colision(player, tab) == 1)
         {
+//            Se mueve bajo las restricciones de la funcion
             Mov = EnemigoDerecha(x, y, player, tab, oponentes);
+            //Si se hizo correctamente el movimiento se retorna 1
             if(Mov == 1)
                 return 1;
             else
                 return 0;
         }
+//        Hay un oponente a la izquierda
         if(colision(player, tab) == 2)
         {
+            //Se mueve bajo las restricciones de la funcion
             Mov = EnemigoIzquierda(x, y, player, tab, oponentes);
+            //Si se hizo correctamente el movimiento se retorna 1
             if(Mov == 1)
                 return 1;
             else
                 return 0;
         }
+//        Hay oponentes en ambos lados
         if(colision(player, tab) == 3)
         {
+            //Se mueve bajo las restricciones de la funcion
             Mov = EnemigoSupremo(x, y, player, tab, oponentes);
+//            Si se hizo correctamente el movimiento se retorna 1
             if(Mov == 1)
                 return 1;
             else
                 return 0;
         }
     }
+//    Si la ficha se mueve hacia arriba
     if(player -> dir == 1)
     {
+//        Se hace lo mismo que cuando la ficha se mueve hacia abajo
         if(colision(player, tab) == 0)
         {
             Mov = SinEnemigos(x, y, player, tab);
@@ -2079,114 +2095,140 @@ int MovimientoValido(int x, int y, Ficha *player, Ficha* oponentes, Tablero* tab
     }
 }
 
-// Circulos rojos
-
+//Funcion que dibuja los circulos rojos
 void CirculosR(Ficha *player, Tablero* tab)
 {
-    int Lados = colision(player, tab);
-    int Comida = comidaDisponible(player, tab);
-    int AmigaC = isAmiga(player, tab);
-    int AmigaL = isAmigalejana(player, tab);
+    int Lados = colision(player, tab); //Si hay fichas oponentes a los lados
+    int Comida = comidaDisponible(player, tab); // Si hay fichas oponentes lejanas
+    int AmigaC = isAmiga(player, tab); // Si hay fichas amigas a los lados
+    int AmigaL = isAmigalejana(player, tab); // Si hay fichas amigas lejanas
+    //Si la ficha se mueve hacia arriba
     if(player -> dir == 0)
     {
+        //Si no hay oponentes a los lados
         if(Lados == 0)
         {
+            // Si no hay amigas a los lados dibujas a ambos lados
             if(AmigaC == 0)
             {
                 DrawCircle(player -> x + 100, player -> y + 100 , 45, RED);
                 DrawCircle(player -> x - 100, player -> y + 100 , 45, RED);
             }
+            // Si hay una amiga a la derecha dibujas a la izquierda
             if(AmigaC == 1)
             {
                 DrawCircle(player -> x - 100, player -> y + 100 , 45, RED);
             }
+            //Si hay una amiga a la izquierda
             if(AmigaC == 2)
             {
                 DrawCircle(player -> x + 100, player -> y + 100 , 45, RED);
             }
+            //Si hay amigas en ambos lados no dibujas
             if(AmigaC == 3)
                 return;
         }
-
+        // Si hay un oponente a la derecha
         if(Lados == 1)
         {
+            // Si se puede comer comer la ficha
             if((AmigaL == 0 || AmigaL == 2) && (Comida == 0 || Comida == 2))
             {
+                //Si hay una amiga tapando el lado izquierdo solo dibujar a la derecha
                 if(AmigaC == 2)
                 {
                     DrawCircle(player -> x + 200, player -> y + 200, 45, RED);
                 }
+                //Si esta dispobible la izquierda dibujas en la izquierda y en la derecha
                 if(AmigaC == 0)
                 {
                     DrawCircle(player -> x + 200, player -> y + 200, 45, RED);
                     DrawCircle(player -> x - 100, player -> y + 100 , 45, RED);
                 }
             }
+            //Si no se puede comer
             if((AmigaL == 1 || AmigaL == 3) || (Comida == 1 || Comida == 3))
             {
+                //Si no tienes amigas estorbando dibujar a la izquierda
                 if(AmigaC == 0)
                 {
                     DrawCircle(player -> x - 100, player -> y + 100 , 45, RED);
                 }
+                // Si tienes amigas estorbando a la izquierda no dibujas nada
                 if(AmigaC == 2)
                     return;
             }
         }
-
+        //Si tienes un oponente a la izquierda
         if(Lados == 2)
         {
+            //Si te puedes comer la ficha
             if((AmigaL == 0 || AmigaL == 1) && (Comida == 0 || Comida == 1))
             {
+                //Si tiens tapado el espacio de la derecha dibujar a la izquierda
                 if(AmigaC == 1)
                     DrawCircle(player -> x - 200, player -> y + 200, 45, RED);
+                //Si tienes el espacio de la derecha dibujas a ambos lados
                 if(AmigaC == 0)
                 {
                     DrawCircle(player -> x - 200, player -> y + 200, 45, RED);
                     DrawCircle(player -> x + 100, player -> y + 100 , 45, RED);
                 }
             }
+            //No se puede comer la ficha
             if((AmigaL == 2 || AmigaL == 3) || (Comida == 2 || Comida == 3))
             {
+                //Si se tiene disponible el espacio de la derecha dibujar a la derecha
                 if(AmigaC == 0)
                     DrawCircle(player -> x + 100, player -> y + 100 , 45, RED);
+                //Si no se tiene disponible no dibujar
                 if(AmigaC == 1)
                     return;
             }
         }
-
+        // Si tienes oponentes a ambos lados
         if(Lados == 3)
         {
+            //Si se pueden comer las dos fichas dibujar a ambos lados
             if(AmigaL == 0 && Comida == 0)
             {
                 DrawCircle(player -> x - 200, player -> y + 200, 45, RED);
                 DrawCircle(player -> x + 200, player -> y + 200, 45, RED);
             }
+            //Si no se pued comer ninguna no dibujar
             if((Comida == 3 || AmigaL == 3) || (Comida == 1 && AmigaL == 2) || (Comida == 2 && AmigaL == 1))
                 return;
-
+            //Si tienes una ficha oponente tapandote a la derecha
             if(Comida == 1)
             {
+                //Si no te tapa una amiga a la izquierda dibujar a la izquierda de lo contrario no dibujar
                 if(AmigaL == 0)
                     DrawCircle(player -> x - 200, player -> y + 200, 45, RED);
                 else
                     return;
             }
+            //Si tienes una ficha amiga tapandote a la derecha
             if(AmigaL == 1)
             {
+                //Si no te tapa un oponente a la izquierda dibujar a la izquierda de lo contrario no dibujar
                 if(Comida == 0)
                     DrawCircle(player -> x - 200, player -> y + 200, 45, RED);
                 else
                     return;
             }
+            //Si tienes una ficha oponente tapandote a la izquierda
             if(Comida == 2)
             {
+                //Si no te tapa una amiga a la derecha dibujar a la derecha de lo contrario no dibujar
                 if(AmigaL == 0)
                     DrawCircle(player -> x + 200, player -> y + 200, 45, RED);
                 else
                     return;
             }
+            //Si tienes una ficha amiga tapandote a la izquierda
             if(AmigaL == 2)
             {
+                //Si no te tapa un oponente a la derecha dibujar a la derecha de lo contrario no dibujar
                 if(Comida == 0)
                     DrawCircle(player -> x + 200, player -> y + 200, 45, RED);
                 else
@@ -2194,8 +2236,10 @@ void CirculosR(Ficha *player, Tablero* tab)
             }
         }
     }
+    //Si la ficha se mueve hacia arriba
     if(player -> dir == 1)
     {
+        //Se usa lo mismo que si una ficha se mueve haca abajo
         if(Lados == 0)
         {
             if(AmigaC == 0)
@@ -2301,134 +2345,23 @@ void CirculosR(Ficha *player, Tablero* tab)
 
 }
 
-// Ganador
-
-int movimientosDisponibles(Ficha* Blancas, Ficha* Negras, Tablero* tab)
-{
-    Ficha* CurrentN = Negras;
-    CurrentN = CurrentN -> sig;
-    Ficha* CurrentB = Blancas;
-    CurrentB = CurrentB -> sig;
-    int contN = 0;
-    int contB = 0;
-    int BloqueadaN = 0;
-    int BloqueadaB = 0;
-
-    while(CurrentN != NULL)
-    {
-        int Lados = colision(CurrentN, tab);
-        int Comida = comidaDisponible(CurrentN, tab);
-        int AmigaC = isAmiga(CurrentN, tab);
-        int AmigaL = isAmigalejana(CurrentN, tab);
-        if(CurrentN -> x == 50 && Lados == 1 && (Comida == 1 || AmigaL == 1))
-        {
-            BloqueadaN ++;
-        }
-        if(CurrentN -> x == 750 && Lados == 2 && (Comida == 2 || AmigaL == 2))
-        {
-            BloqueadaN++;
-        }
-        if(Lados == 3 && (Comida == 3 || AmigaL == 3))
-        {
-            BloqueadaN++;
-        }
-        if(AmigaC == 3)
-        {
-            BloqueadaN++;
-        }
-        if(Lados == 1 && Comida == 1 && AmigaC == 2)
-        {
-            BloqueadaN++;
-        }
-        if(Lados == 2 && Comida == 2 && AmigaC == 1)
-        {
-            BloqueadaN++;
-        }
-        CurrentN = CurrentN -> sig;
-    }
-
-    while (CurrentB != NULL)
-    {
-        int Lados = colision(CurrentN, tab);
-        int Comida = comidaDisponible(CurrentN, tab);
-        int AmigaC = isAmiga(CurrentN, tab);
-        int AmigaL = isAmigalejana(CurrentN, tab);
-
-        if(CurrentN -> x == 50 && Lados == 1 && (Comida == 1 || AmigaL == 1))
-        {
-            BloqueadaB++;
-        }
-        if(CurrentN -> x == 750 && Lados == 2 && (Comida == 2 || AmigaL == 2))
-        {
-            BloqueadaB++;
-        }
-        if(Lados == 3 && (Comida == 3 || AmigaL == 3))
-        {
-            BloqueadaB++;
-        }
-        if(AmigaC == 3)
-        {
-            BloqueadaB++;
-        }
-        if(Lados == 1 && Comida == 1 && AmigaC == 2)
-        {
-            BloqueadaB++;
-        }
-        if(Lados == 2 && Comida == 2 && AmigaC == 1)
-        {
-            BloqueadaB++;
-        }
-        CurrentB = CurrentB -> sig;
-    }
-
-    CurrentN = Negras -> sig;
-    CurrentB = Blancas -> sig;
-
-    while (CurrentN != NULL)
-    {
-        if(CurrentN -> vida == 1)
-        {
-            contN++;
-        }
-        CurrentN = CurrentN -> sig;
-    }
-    while (CurrentB != NULL)
-    {
-        if(CurrentB -> vida == 1)
-        {
-            contB++;
-        }
-        CurrentB = CurrentB -> sig;
-    }
-
-    if(contN == BloqueadaN)
-        return 2;
-    if(contB == BloqueadaB)
-        return 1;
-    return 0;
-}
-
+// Funcion para obtener al ganador
 int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
 {
+    //Listas enlazadas de las fichas negras y blancas
     Ficha* CurrentB = Blancas -> sig ? Blancas -> sig: Blancas;
     Ficha *CurrentN = Negras -> sig ? Negras -> sig: Negras;
 
+    //Se evitan valores NULL
     if(CurrentN == NULL || CurrentB == NULL)
         return 0;
+    //Contadores para las fichas
     int contB = 0;
     int contN = 0;
 
-//    if(movimientosDisponibles(Blancas, Negras, tab) == 2)
-//    {
-//        return 2;
-//    }
-//    if(movimientosDisponibles(Blancas, Negras, tab) == 1)
-//    {
-//        return 1;
-//    }
-
-    while (CurrentN != NULL)
+    while (CurrentN != NULL) // Se recorre la lista
     {
+//        Si la ficha se la copmieron se suma
         if(CurrentN -> vida == 0)
             contN++;
         CurrentN = CurrentN -> sig;
@@ -2436,25 +2369,29 @@ int getWinner(Ficha* Blancas, Ficha* Negras, Tablero* tab)
     }
     while (CurrentB != NULL)
     {
+        //Si la ficha se la copmieron se suma
         if(CurrentB -> vida == 0)
             contB++;
         CurrentB = CurrentB -> sig;
     }
-
+    //Si todas las fichas blancas han sido comidas ganan las negras y se retorna 1
     if(contB == 12)
         return 1;
+    //Si todas las fichas negras han sido comidas ganan las blancas y se retorna 2
     if(contN == 12)
         return 2;
+    //Si no ha ganado nadie se retorna 0
     return 0;
 }
 
-// Archivos
-
+// Funcion para guardar el juego
 void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
 {
+    //Apuntadores a las listas enlazadas de las fichas
     Ficha* currentB = Blancas -> sig ? Blancas -> sig: Blancas;
     Ficha* currentN = Negras -> sig ? Negras -> sig: Negras;
 
+    //Arreglos para guardar los datos de las estructuras
     int x[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int y[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int id[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -2472,6 +2409,7 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
     {
         for(int i = 0; i < 12; i++)
         {
+            //Se guardan los datos de las negras
             if(currentN != NULL)
             {
                 x[i] = currentN -> x;
@@ -2481,6 +2419,7 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
                 dir[i] = currentN -> dir;
                 col[i] = 1;
             }
+            //Si es NULL se guarda como 0
             if(currentN == NULL)
             {
                 x[i] = 0;
@@ -2493,6 +2432,7 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
         }
         for(int i = 12 ; i < 24; i++)
         {
+//            Se inicializan valores de las blancas
             if(currentB != NULL)
             {
                 x[i] = currentB -> x;
@@ -2512,7 +2452,7 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
             }
             currentB = currentB -> sig;
         }
-
+//       Se guardan valores del tablero
         for(int i = 0; i < 64; i++)
         {
             Dis_tab[i] = tab -> Tablero[i] -> Disponible;
@@ -2520,7 +2460,7 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
             y_tab[i] = tab -> Tablero[i] -> y;
             reina[i] = tab -> Tablero[i] -> Reina;
         }
-
+//       Se escriben en el archivo
         fwrite(x, sizeof (x), 1,save);
         fwrite(y, sizeof (y), 1,save);
         fwrite(id, sizeof (id), 1,save);
@@ -2537,14 +2477,17 @@ void saveGame(Ficha* Blancas, Ficha* Negras, int turno, Tablero* tab)
     fclose(save);
     exit(0);
 }
+//Funcion para cargar juego guardado
 void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
 {
+    //Apuntadores a las listas enlazadas de las fichas
     Ficha* currentN = Negras -> sig;
     Ficha* CurrentB = Blancas -> sig;
     FILE* save = fopen("savegame.txt", "r");
 
     if(save != NULL)
     {
+        //Se crean arreglos para recuperar los datos de las estructuras
         int x[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int y[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         int id[24] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
@@ -2572,6 +2515,7 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
 
         for(int i = 0; i < 12; i++)
         {
+            //Se le asignan los datos a las fichas negras
             if(currentN != NULL)
             {
                 currentN -> x = x[i];
@@ -2584,6 +2528,7 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
         }
         for(int i = 12; i < 24; i++)
         {
+            //Se le asignan los datos a las fichas blancas
             if(CurrentB != NULL)
             {
                 CurrentB -> x = x[i];
@@ -2594,8 +2539,9 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
             }
             CurrentB = CurrentB -> sig;
         }
+        //Se le asigna el turno
         turno = &trn[0];
-
+        //Se le asignan los datos al tablero
         for(int i = 0; i  < 64; i++)
         {
             tab -> Tablero[i] -> Disponible = Dis_tab[i];
@@ -2606,5 +2552,5 @@ void loadGame(Ficha* Blancas, Ficha* Negras, int* turno, Tablero* tab)
     } else
     {
         DrawText("No se guardo nada anteriormente", 200, 400, 36, RED);
-    }
+    }// Si no se guardo ningun archivo anteriormente
 }
